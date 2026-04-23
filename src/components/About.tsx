@@ -1,12 +1,21 @@
 import { motion } from "framer-motion";
 import bg from "@/assets/about-bg.jpeg";
 import ribbon from "@/assets/hero-ribbon.jpg";
+import introVideo from "@/assets/about-intro.mp4";
 
 const About = () => {
   return (
     <section id="about" className="relative min-h-screen w-full overflow-hidden flex items-center">
       <div className="absolute inset-0">
-        <img src={bg} alt="" className="w-full h-full object-cover" />
+        <video
+          src={introVideo}
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster={bg}
+          className="w-full h-full object-cover opacity-70"
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-background/40" />
       </div>
 
