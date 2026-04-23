@@ -1,16 +1,54 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useEffect, useState } from "react";
+import Header from "@/components/Header";
+import Hero from "@/components/Hero";
+import About from "@/components/About";
+import Work from "@/components/Work";
+import Services from "@/components/Services";
+import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const Index = () => {
+  const [headerVisible, setHeaderVisible] = useState(false);
+  const [active, setActive] = useState("home");
+
+  useEffect(() => {
+    document.title = "Annie Makes Studio — Cinematic Storytelling, VFX & AI Content";
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", "Annie Makes Studio is a creative production house crafting cinematic storytelling, VFX, animation, and AI-driven content.");
+  }, []);
+
+  useEffect(() => {
+    const sections = ["home", "about", "work", "services", "contact"];
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      },
+      { rootMargin: "-40% 0px -50% 0px" }
+    );
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const handleNav = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
-    </div>
+    <main className="bg-background text-foreground">
+      <Header active={active} onNavigate={handleNav} visible={headerVisible} />
+      <Hero onIntroComplete={() => setHeaderVisible(true)} />
+      <About />
+      <Work />
+      <Services />
+      <Contact />
+      <Footer />
+    </main>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
