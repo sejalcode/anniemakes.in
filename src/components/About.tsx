@@ -1,26 +1,25 @@
 import { motion } from "framer-motion";
 import bg from "@/assets/about-bg.jpeg";
 import ribbon from "@/assets/hero-ribbon.jpg";
-import introVideo from "@/assets/about-intro.mp4";
 
 const About = () => {
   return (
     <section id="about" className="relative min-h-screen w-full overflow-hidden flex items-center">
+      {/* Background image with subtle slow zoom */}
       <div className="absolute inset-0">
-        <video
-          src={introVideo}
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster={bg}
-          className="w-full h-full object-cover opacity-70"
+        <motion.img
+          src={bg}
+          alt=""
+          initial={{ scale: 1.05 }}
+          animate={{ scale: 1.12 }}
+          transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, repeatType: "reverse" }}
+          className="w-full h-full object-cover opacity-60"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-background/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/75 to-background/40" />
       </div>
 
-      {/* Right ribbon */}
-      <div className="absolute top-1/2 right-0 -translate-y-1/2 w-1/2 h-full pointer-events-none opacity-40">
+      {/* Right ribbon — slow drift */}
+      <div className="absolute top-1/2 right-0 -translate-y-1/2 w-1/2 h-full pointer-events-none opacity-30">
         <img src={ribbon} alt="" className="w-full h-full object-cover animate-ribbon" style={{ mixBlendMode: "screen" }} />
       </div>
 

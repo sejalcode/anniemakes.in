@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Box, Brain, Film, Hexagon, Clapperboard, ArrowRight } from "lucide-react";
+import { Box, Brain, Film, Hexagon, ArrowRight } from "lucide-react";
 import bg from "@/assets/services-bg.jpeg";
 
 const SERVICES = [
@@ -59,23 +59,6 @@ const Services = () => {
           })}
         </div>
 
-        {/* Full-width 5th card */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="glass-card group rounded-md p-6 md:p-8 mt-5 flex gap-6 items-center cursor-pointer"
-        >
-          <Clapperboard className="text-highlight/80 shrink-0" size={56} strokeWidth={1} />
-          <div className="flex-1">
-            <p className="text-xs text-foreground/50 mb-1">05</p>
-            <h3 className="font-display text-2xl md:text-3xl text-highlight tracking-wider mb-2">VIDEO PRODUCTION</h3>
-            <div className="w-10 h-px bg-highlight/50 mb-3" />
-            <p className="text-sm text-foreground/75 leading-relaxed font-light max-w-3xl">Full-scale production from concept to delivery — directing, cinematography, post, and finishing under one cinematic roof.</p>
-          </div>
-          <ArrowRight className="text-highlight/0 group-hover:text-highlight/80 transition-all duration-500" size={20} />
-        </motion.div>
       </div>
     </section>
   );
