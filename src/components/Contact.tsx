@@ -73,15 +73,15 @@ const Contact = () => {
         >
           <input type="hidden" name="form-name" value="contact" />
           <div>
-            <label className="tracking-[0.35em] text-xs text-accent-red">NAME</label>
+            <label className="tracking-[0.35em] text-xs text-foreground">NAME</label>
             <input name="name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="underline-input mt-2" maxLength={100} />
           </div>
           <div>
-            <label className="tracking-[0.35em] text-xs text-accent-red">EMAIL</label>
+            <label className="tracking-[0.35em] text-xs text-foreground">EMAIL</label>
             <input name="email" type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="underline-input mt-2" maxLength={255} />
           </div>
           <div>
-            <label className="tracking-[0.35em] text-xs text-accent-red">MESSAGE</label>
+            <label className="tracking-[0.35em] text-xs text-foreground">MESSAGE</label>
             <textarea name="message" value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} className="underline-input mt-2 resize-none" rows={3} maxLength={1000} />
           </div>
 
