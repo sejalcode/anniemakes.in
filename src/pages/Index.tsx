@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 const Index = () => {
   const [headerVisible, setHeaderVisible] = useState(false);
   const [active, setActive] = useState("home");
+  const [inFooter, setInFooter] = useState(false);
 
   useEffect(() => {
     document.title = "Annie Makes Studio — Cinematic Storytelling, VFX & AI Content";
@@ -31,7 +32,21 @@ const Index = () => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
-    return () => observer.disconnect();
+
+    const footer = document.getElementById("site-footer");
+    let footerObs: IntersectionObserver | null = null;
+    if (footer) {
+      footerObs = new IntersectionObserver(
+        entries => entries.forEach(e => setInFooter(e.isIntersecting)),
+        { threshold: 0.05 }
+      );
+      footerObs.observe(footer);
+    }
+
+    return () => {
+      observer.disconnect();
+      footerObs?.disconnect();
+    };
   }, []);
 
   const handleNav = (id: string) => {
@@ -40,7 +55,7 @@ const Index = () => {
 
   return (
     <main className="bg-background text-foreground">
-      <Header active={active} onNavigate={handleNav} visible={headerVisible} />
+      <Header active={active} onNavigate={handleNav} visible={headerVisible && !inFooter} />
       <Hero onIntroComplete={() => setHeaderVisible(true)} />
       <About />
       <Work />
