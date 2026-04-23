@@ -23,8 +23,13 @@ const Services = () => {
         className="min-h-screen py-24"
         background={
           <>
-            <motion.img src={bg} alt="" style={{ y: bgY, scale: 1.1 }} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-background/70" />
+            <motion.img
+              src={bg}
+              alt=""
+              style={{ y: bgY, scale: 1.12 }}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/60 to-background/85" />
           </>
         }
       >
