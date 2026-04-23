@@ -11,15 +11,15 @@ interface Props {
 const INTRO_KEY = "annie-makes-intro-played";
 
 const Hero = ({ onIntroComplete }: Props) => {
-  // 0: blank
-  // 1: logo center fades in & scales up
-  // 2: "ANNIE MAKES" reveals left-to-right behind the logo
-  // 3: logo flies from center to header position
-  // 4: nav appears
-  // 5: content fades in
-  // 6: background animation starts
+  // Stages:
+  // 0: blank dark screen
+  // 1: logo fades in at center & scales up
+  // 2: logo flies to header position (top-left) and stays
+  // 3: "ANNIE MAKES" reveals letter-by-letter in the center
+  // 4: tagline + CTA + scroll cue fade in (top/bottom enter)
+  // 5: background ribbon + particles start
   const alreadyPlayed = typeof window !== "undefined" && sessionStorage.getItem(INTRO_KEY) === "1";
-  const [stage, setStage] = useState(alreadyPlayed ? 6 : 0);
+  const [stage, setStage] = useState(alreadyPlayed ? 5 : 0);
 
   useEffect(() => {
     if (alreadyPlayed) {
@@ -27,15 +27,14 @@ const Hero = ({ onIntroComplete }: Props) => {
       return;
     }
     const timers = [
-      setTimeout(() => setStage(1), 500),
-      setTimeout(() => setStage(2), 1800),
-      setTimeout(() => setStage(3), 3400),
-      setTimeout(() => { setStage(4); onIntroComplete(); }, 4200),
-      setTimeout(() => setStage(5), 4800),
+      setTimeout(() => setStage(1), 400),     // logo center appears
+      setTimeout(() => setStage(2), 2000),    // logo flies to header
+      setTimeout(() => { setStage(3); onIntroComplete(); }, 3100), // ANNIE MAKES + nav
+      setTimeout(() => setStage(4), 4400),    // content
       setTimeout(() => {
-        setStage(6);
+        setStage(5);
         sessionStorage.setItem(INTRO_KEY, "1");
-      }, 5600),
+      }, 5400),
     ];
     return () => timers.forEach(clearTimeout);
   }, [onIntroComplete, alreadyPlayed]);
@@ -47,7 +46,7 @@ const Hero = ({ onIntroComplete }: Props) => {
       {/* Background ribbon */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: stage >= 6 ? 0.85 : 0 }}
+        animate={{ opacity: stage >= 5 ? 0.85 : 0 }}
         transition={{ duration: 2.5, ease: "easeInOut" }}
         className="absolute inset-0 pointer-events-none"
       >
@@ -74,7 +73,7 @@ const Hero = ({ onIntroComplete }: Props) => {
       </div>
 
       {/* Particles */}
-      {stage >= 6 && (
+      {stage >= 5 && (
         <div className="absolute inset-0 pointer-events-none opacity-50">
           {Array.from({ length: 30 }).map((_, i) => (
             <motion.span
@@ -88,16 +87,16 @@ const Hero = ({ onIntroComplete }: Props) => {
         </div>
       )}
 
-      {/* Centered hero content (final UI matches reference) */}
+      {/* Centered hero content (final UI) */}
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 md:px-10 text-center">
-        {/* "ANNIE MAKES" — letter-by-letter reveal at stage 2 */}
+        {/* "ANNIE MAKES" — appears at stage 3 (after logo flies up) */}
         <div className="overflow-hidden mb-6">
           <div className="flex justify-center flex-wrap">
             {agencyName.split("").map((letter, i) => (
               <motion.span
                 key={i}
                 initial={{ opacity: 0, filter: "blur(20px)", y: 50 }}
-                animate={stage >= 2 ? { opacity: 1, filter: "blur(0px)", y: 0 } : {}}
+                animate={stage >= 3 ? { opacity: 1, filter: "blur(0px)", y: 0 } : {}}
                 transition={{
                   delay: alreadyPlayed ? i * 0.04 : i * 0.08,
                   duration: 1.4,
@@ -111,21 +110,21 @@ const Hero = ({ onIntroComplete }: Props) => {
           </div>
         </div>
 
-        {/* Tagline */}
+        {/* Tagline (top→down enter) */}
         <motion.p
-          initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
-          animate={stage >= 5 ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
-          transition={{ duration: 1, delay: 0.2 }}
+          initial={{ opacity: 0, y: -30, filter: "blur(10px)" }}
+          animate={stage >= 4 ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+          transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="font-light text-sm md:text-base text-foreground/75 tracking-[0.3em] uppercase mb-12"
         >
           Cinematic Storytelling • VFX • AI Content
         </motion.p>
 
-        {/* CTA */}
+        {/* CTA (bottom→up enter) */}
         <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={stage >= 5 ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.5 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={stage >= 4 ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
           onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
           className="group relative inline-flex items-center gap-3 px-8 md:px-10 py-4 bg-accent-red/90 text-foreground tracking-[0.25em] text-xs font-medium uppercase border border-highlight/20 hover:bg-accent-red transition-colors duration-500"
           style={{ boxShadow: "0 0 30px hsl(var(--accent-red)/0.35)" }}
@@ -141,21 +140,21 @@ const Hero = ({ onIntroComplete }: Props) => {
         </motion.button>
       </div>
 
-      {/* Intro logo: center → header (only when intro plays) */}
-      {!alreadyPlayed && stage < 3 && (
+      {/* Intro logo overlay: center → header (only when intro plays) */}
+      {!alreadyPlayed && stage < 2 && (
         <motion.img
           src={logo}
           alt="Annie Makes"
           initial={{ opacity: 0, scale: 0.4 }}
           animate={{
             opacity: stage >= 1 ? 1 : 0,
-            scale: stage >= 1 ? (stage >= 2 ? 1.15 : 1) : 0.4,
+            scale: stage >= 1 ? 1.15 : 0.4,
           }}
           transition={{ duration: 1.4, ease: [0.4, 0, 0.2, 1] }}
           className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-44 md:h-60 w-auto z-40 drop-shadow-[0_0_40px_rgba(255,240,196,0.4)] pointer-events-none"
         />
       )}
-      {!alreadyPlayed && stage === 3 && (
+      {!alreadyPlayed && stage === 2 && (
         <motion.img
           src={logo}
           alt=""
@@ -168,9 +167,9 @@ const Hero = ({ onIntroComplete }: Props) => {
 
       {/* Scroll cue */}
       <motion.button
-        initial={{ opacity: 0 }}
-        animate={stage >= 5 ? { opacity: 1 } : {}}
-        transition={{ duration: 1, delay: 1 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={stage >= 4 ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 1, delay: 0.7 }}
         onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-highlight/70 hover:text-highlight transition-colors"
       >
