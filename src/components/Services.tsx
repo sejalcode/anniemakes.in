@@ -26,10 +26,10 @@ const Services = () => {
             <motion.img
               src={bg}
               alt=""
-              style={{ y: bgY, scale: 1.12 }}
+              style={{ y: bgY, scale: 1.06 }}
               className="absolute inset-0 w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/60 to-background/85" />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/35 to-background/70" />
           </>
         }
       >

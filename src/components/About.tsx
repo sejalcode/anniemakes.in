@@ -15,16 +15,14 @@ const About = () => {
         className="min-h-screen flex items-center"
         background={
           <>
-            {/* Full-section about-bg image */}
+            {/* Full-section about-bg image — kept clear, only a soft left-side gradient for text legibility */}
             <motion.img
               src={bg}
               alt=""
-              style={{ y: bgY, scale: 1.08 }}
+              style={{ y: bgY, scale: 1.04 }}
               className="w-full h-full object-cover"
             />
-            {/* Cinematic overlay so text stays readable */}
-            <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/70 to-background/40" />
-            <div className="absolute inset-0 bg-background/30" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/75 via-background/30 to-transparent" />
           </>
         }
       >
