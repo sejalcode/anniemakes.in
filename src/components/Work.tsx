@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { PROJECTS } from "@/data/projects";
@@ -15,16 +15,33 @@ const Work = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
+  // Measure actual overflow so the last card always lands flush with the
+  // viewport's right edge regardless of breakpoint.
+  const [maxShift, setMaxShift] = useState(0);
+  useEffect(() => {
+    if (isMobile) return;
+    const measure = () => {
+      const track = trackRef.current;
+      if (!track) return;
+      const overflow = track.scrollWidth - window.innerWidth;
+      setMaxShift(Math.max(0, overflow));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    // Re-measure after images/fonts settle
+    const t = setTimeout(measure, 300);
+    return () => {
+      window.removeEventListener("resize", measure);
+      clearTimeout(t);
+    };
+  }, [isMobile]);
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end end"],
   });
 
-  // Track: 5 cards × 42vw + 4 gaps (2rem) + horizontal padding (4rem each side).
-  // Total ≈ 5*42 + 4*2 + 8 = 226vw. Visible 100vw, so shift = -(226 - 100) = -126vw.
-  // As % of track width: -126/226 ≈ -55.75%. Use -56% to fully reveal last card.
-  const x = useTransform(scrollYProgress, [0, 1], isMobile ? ["0%", "0%"] : ["0%", "-56%"]);
-
+  const x = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 0 : -maxShift]);
   const ribbonY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
   const handleHover = (id: number, hovering: boolean) => {
