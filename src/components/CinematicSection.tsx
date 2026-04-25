@@ -58,6 +58,7 @@ interface RevealProps {
   className?: string;
   as?: "div" | "li" | "span" | "p" | "h2" | "h3";
   y?: number;
+  style?: React.CSSProperties;
 }
 
 /** Single foreground element with cinematic reveal. */
@@ -68,6 +69,7 @@ export const Reveal = ({
   className = "",
   as = "div",
   y = 40,
+  style,
 }: RevealProps) => {
   const reduce = useReducedMotion();
   const MotionTag = motion[as] as typeof motion.div;
@@ -78,6 +80,7 @@ export const Reveal = ({
       viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
       transition={{ duration: 0.9, delay: 0.35 + delay + order * 0.12, ease: [0.22, 1, 0.36, 1] }}
       className={className}
+      style={style}
     >
       {children}
     </MotionTag>
