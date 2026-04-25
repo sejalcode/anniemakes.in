@@ -39,7 +39,7 @@ const Work = () => {
       ref={sectionRef}
       id="work"
       className="relative"
-      style={{ height: isMobile ? "auto" : "320vh" }}
+      style={{ height: isMobile ? "auto" : "360vh" }}
     >
       <div className={isMobile ? "relative" : "sticky top-0 h-screen overflow-hidden"}>
         <CinematicSection
