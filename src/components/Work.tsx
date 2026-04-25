@@ -74,15 +74,12 @@ const Work = () => {
           }
         >
           <div className="w-full">
-            <div className="text-center mb-10 px-6 md:px-8">
+            <div className="text-center mb-6 md:mb-8 px-6 md:px-8">
               <Reveal order={0}>
-                <p className="tracking-[0.4em] text-xs text-highlight/80 mb-3">SELECTED PROJECTS</p>
+                <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-highlight font-light glow-text">OUR WORK</h2>
               </Reveal>
               <Reveal order={1}>
-                <h2 className="font-display text-4xl sm:text-5xl md:text-7xl text-highlight font-light glow-text">OUR WORK</h2>
-              </Reveal>
-              <Reveal order={2}>
-                <div className="mx-auto mt-3 w-24 h-px bg-highlight/60 relative">
+                <div className="mx-auto mt-3 w-20 h-px bg-highlight/60 relative">
                   <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-1 h-1 rotate-45 bg-highlight" />
                 </div>
               </Reveal>
@@ -96,17 +93,17 @@ const Work = () => {
                 className={
                   isMobile
                     ? "flex flex-col gap-6 px-6"
-                    : "flex gap-8 pl-16 pr-16 will-change-transform"
+                    : "flex gap-6 lg:gap-8 pl-10 pr-10 lg:pl-16 lg:pr-16 will-change-transform"
                 }
               >
                 {PROJECTS.map((p, i) => (
-                  <Reveal key={p.id} order={3 + i}>
+                  <Reveal key={p.id} order={2 + i}>
                     <button
                       onClick={() => navigate(`/work/${p.id}`)}
                       onMouseEnter={() => handleHover(p.id, true)}
                       onMouseLeave={() => handleHover(p.id, false)}
-                      className="group relative aspect-[3/4] overflow-hidden rounded-sm border border-accent-red/30 shrink-0 w-full"
-                      style={isMobile ? undefined : { width: "42vw", maxWidth: "560px" }}
+                      className="group relative aspect-[3/4] overflow-hidden rounded-sm border border-accent-red/30 shrink-0 w-full max-w-sm mx-auto md:mx-0 md:max-w-none"
+                      style={isMobile ? undefined : { width: "min(32vw, 420px)" }}
                     >
                       <img src={p.img} alt={p.category} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
                       {p.video && (
