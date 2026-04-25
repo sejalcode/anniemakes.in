@@ -20,11 +20,10 @@ const Work = () => {
     offset: ["start start", "end end"],
   });
 
-  // Slightly wider cards (only ~2 fully visible). Track ends exactly when the
-  // last card's right edge meets the viewport's right edge.
-  // 5 cards × 46vw + 4 gaps × 2rem (~2vw) ≈ 238vw track. Visible 100vw → shift -138vw.
-  // We express in % of track width: -138 / 238 ≈ -58%.
-  const x = useTransform(scrollYProgress, [0, 1], isMobile ? ["0%", "0%"] : ["0%", "-58%"]);
+  // Track: 5 cards × 42vw + 4 gaps (2rem) + horizontal padding (4rem each side).
+  // Total ≈ 5*42 + 4*2 + 8 = 226vw. Visible 100vw, so shift = -(226 - 100) = -126vw.
+  // As % of track width: -126/226 ≈ -55.75%. Use -56% to fully reveal last card.
+  const x = useTransform(scrollYProgress, [0, 1], isMobile ? ["0%", "0%"] : ["0%", "-56%"]);
 
   const ribbonY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
@@ -80,7 +79,7 @@ const Work = () => {
                 className={
                   isMobile
                     ? "flex flex-col gap-6 px-6"
-                    : "flex gap-6 md:gap-8 pl-8 md:pl-16 pr-8 md:pr-16 will-change-transform"
+                    : "flex gap-8 pl-16 pr-16 will-change-transform"
                 }
               >
                 {PROJECTS.map((p, i) => (
@@ -90,7 +89,7 @@ const Work = () => {
                       onMouseEnter={() => handleHover(p.id, true)}
                       onMouseLeave={() => handleHover(p.id, false)}
                       className="group relative aspect-[3/4] overflow-hidden rounded-sm border border-accent-red/30 shrink-0 w-full"
-                      style={isMobile ? undefined : { width: "min(46vw, 620px)" }}
+                      style={isMobile ? undefined : { width: "42vw", maxWidth: "560px" }}
                     >
                       <img src={p.img} alt={p.category} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
                       {p.video && (
