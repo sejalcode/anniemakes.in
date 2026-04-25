@@ -86,23 +86,30 @@ const Work = () => {
             </div>
 
             <div className="relative">
-              {/* Horizontal pan track on desktop, vertical stack on mobile */}
+              {/* Horizontal pan track on desktop, vertical stack on mobile.
+                  Symmetric horizontal padding (matches gap) so the first and
+                  last cards always have equal breathing room from the edges. */}
               <motion.div
                 ref={trackRef}
                 style={isMobile ? undefined : { x }}
                 className={
                   isMobile
                     ? "flex flex-col gap-6 px-6"
-                    : "flex gap-6 lg:gap-8 pl-10 pr-10 lg:pl-16 lg:pr-16 will-change-transform"
+                    : "flex gap-6 lg:gap-8 px-6 lg:px-10 will-change-transform"
                 }
               >
                 {PROJECTS.map((p, i) => (
-                  <Reveal key={p.id} order={2 + i}>
+                  <Reveal
+                    key={p.id}
+                    order={2 + i}
+                    className={isMobile ? "w-full max-w-sm mx-auto" : "shrink-0"}
+                    style={isMobile ? undefined : { width: "min(30vw, 380px)" }}
+                  >
                     <button
                       onClick={() => navigate(`/work/${p.id}`)}
                       onMouseEnter={() => handleHover(p.id, true)}
                       onMouseLeave={() => handleHover(p.id, false)}
-                      className="group relative aspect-[3/4] overflow-hidden rounded-sm border border-accent-red/30 shrink-0 w-full max-w-sm mx-auto md:mx-0 md:max-w-none"
+                      className="group relative aspect-[3/4] overflow-hidden rounded-sm border border-accent-red/30 w-full block"
                       style={isMobile ? undefined : { width: "min(32vw, 420px)" }}
                     >
                       <img src={p.img} alt={p.category} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
