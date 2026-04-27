@@ -5,7 +5,6 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { CinematicSection, Reveal } from "./CinematicSection";
 import bg from "@/assets/contact-bg.jpeg";
-import ribbon from "@/assets/hero-ribbon.jpg";
 
 const schema = z.object({
   name: z.string().trim().min(1, "Name required").max(100),
@@ -19,7 +18,6 @@ const Contact = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-  const ribbonY = useTransform(scrollYProgress, [0, 1], ["0%", "10%"]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,11 +40,21 @@ const Contact = () => {
         id="contact"
         background={
           <>
-            <motion.img src={bg} alt="" style={{ y: bgY, scale: 1.1 }} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-background/75" />
-            <motion.div style={{ y: ribbonY }} className="absolute bottom-0 left-0 right-0 h-1/2 opacity-50">
-              <img src={ribbon} alt="" className="w-full h-full object-cover animate-ribbon" style={{ mixBlendMode: "screen" }} />
-            </motion.div>
+            <motion.img src={bg} alt="" style={{ y: bgY, scale: 1.05 }} className="w-full h-full object-cover" />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(180deg, hsl(var(--background) / 0.85) 0%, hsl(var(--background) / 0.7) 50%, hsl(var(--background) / 0.92) 100%)",
+              }}
+            />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(ellipse 60% 50% at 50% 45%, transparent 0%, hsl(var(--background) / 0.4) 100%)",
+              }}
+            />
           </>
         }
       >
