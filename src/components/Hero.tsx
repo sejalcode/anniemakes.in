@@ -34,27 +34,27 @@ const Hero = ({ onIntroComplete }: Props) => {
         transition={{ duration: 1.4, ease: "easeInOut" }}
         className="absolute inset-0 pointer-events-none"
       >
-        {/* Tilted golden ribbon, anchored bottom-right, sweeping up to top-right */}
+        {/* Tilted golden ribbon, sweeping from bottom-left to top-right */}
         <div
-          className="absolute -inset-[10%]"
-          style={{ transform: "rotate(-22deg)", transformOrigin: "70% 60%" }}
+          className="absolute -inset-[15%]"
+          style={{ transform: "rotate(-18deg)", transformOrigin: "65% 55%" }}
         >
           <div
             className="absolute inset-0 bg-no-repeat bg-cover bg-right animate-ribbon"
             style={{
               backgroundImage: `url(${ribbon})`,
               mixBlendMode: "screen",
-              opacity: 0.95,
-              filter: "hue-rotate(-25deg) saturate(1.15) brightness(1.05)",
+              opacity: 1,
+              filter: "sepia(1) saturate(2.8) hue-rotate(-12deg) brightness(1.15)",
             }}
           />
         </div>
-        {/* Fade ribbon into dark on the left edge */}
+        {/* Fade ribbon into dark on the left edge — leave right side untouched */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to right, #1a0402 0%, rgba(26,4,2,0.95) 22%, rgba(26,4,2,0.55) 45%, rgba(26,4,2,0.15) 70%, transparent 100%)",
+              "linear-gradient(to right, #1a0402 0%, rgba(26,4,2,0.92) 18%, rgba(26,4,2,0.45) 38%, rgba(26,4,2,0.05) 60%, transparent 80%)",
           }}
         />
         {/* Vignette to deepen edges */}
@@ -62,7 +62,7 @@ const Hero = ({ onIntroComplete }: Props) => {
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at 78% 55%, transparent 0%, rgba(10,2,1,0.55) 75%, rgba(10,2,1,0.85) 100%)",
+              "radial-gradient(ellipse at 80% 50%, transparent 0%, rgba(10,2,1,0.45) 80%, rgba(10,2,1,0.85) 100%)",
           }}
         />
       </motion.div>
