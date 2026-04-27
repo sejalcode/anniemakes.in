@@ -34,10 +34,21 @@ const Hero = ({ onIntroComplete }: Props) => {
         transition={{ duration: 1.4, ease: "easeInOut" }}
         className="absolute inset-0 pointer-events-none"
       >
+        {/* Tilted golden ribbon, anchored bottom-right, sweeping up to top-right */}
         <div
-          className="absolute inset-0 bg-no-repeat bg-cover bg-right animate-ribbon"
-          style={{ backgroundImage: `url(${ribbon})`, mixBlendMode: "screen", opacity: 0.85 }}
-        />
+          className="absolute -inset-[10%]"
+          style={{ transform: "rotate(-22deg)", transformOrigin: "70% 60%" }}
+        >
+          <div
+            className="absolute inset-0 bg-no-repeat bg-cover bg-right animate-ribbon"
+            style={{
+              backgroundImage: `url(${ribbon})`,
+              mixBlendMode: "screen",
+              opacity: 0.95,
+              filter: "hue-rotate(-25deg) saturate(1.15) brightness(1.05)",
+            }}
+          />
+        </div>
         {/* Fade ribbon into dark on the left edge */}
         <div
           className="absolute inset-0"
