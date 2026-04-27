@@ -32,7 +32,7 @@ const Hero = ({ onIntroComplete }: Props) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: stage >= 1 ? 1 : 0 }}
         transition={{ duration: 1.4, ease: "easeInOut" }}
-        className="absolute inset-y-0 right-0 w-full md:w-[75%] pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
       >
         <div
           className="absolute inset-0 bg-no-repeat bg-cover bg-right animate-ribbon"
