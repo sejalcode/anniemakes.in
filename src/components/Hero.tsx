@@ -1,79 +1,77 @@
 import { motion } from "framer-motion";
-import { useEffect } from "react";
-import { ArrowDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Mouse } from "lucide-react";
 import ribbon from "@/assets/hero-ribbon.jpg";
 
 interface Props {
   onIntroComplete: () => void;
 }
 
-const Hero = ({ onIntroComplete }: Props) => {
-  // Intro logo animation removed — show final UI immediately.
-  useEffect(() => {
-    onIntroComplete();
-  }, [onIntroComplete]);
+const SERVICES = ["VFX", "AI CONTENT", "ANIMATION", "VIDEO PRODUCTION"];
+const AGENCY = "ANNIE MAKES";
 
-  const agencyName = "ANNIE MAKES";
+const Hero = ({ onIntroComplete }: Props) => {
+  // Stage 0: blank, 1: ribbon visible, 2: title + content
+  const [stage, setStage] = useState(0);
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setStage(1), 500);   // ribbon pattern fades in
+    const t2 = setTimeout(() => setStage(2), 1600);  // title + rest reveal
+    const t3 = setTimeout(() => onIntroComplete(), 2400); // header appears
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+  }, [onIntroComplete]);
 
   return (
     <section id="home" className="relative min-h-screen w-full overflow-hidden bg-background">
-      {/* Background ribbon */}
+      {/* Ribbon pattern — right side only */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.85 }}
-        transition={{ duration: 1.4, ease: "easeInOut" }}
-        className="absolute inset-0 pointer-events-none"
+        animate={{ opacity: stage >= 1 ? 1 : 0 }}
+        transition={{ duration: 1.2, ease: "easeInOut" }}
+        className="absolute inset-y-0 right-0 w-full md:w-[70%] pointer-events-none"
       >
         <div
-          className="absolute inset-0 bg-cover bg-center animate-ribbon"
-          style={{ backgroundImage: `url(${ribbon})`, mixBlendMode: "screen" }}
+          className="absolute inset-0 bg-no-repeat bg-cover bg-right animate-ribbon"
+          style={{ backgroundImage: `url(${ribbon})` }}
         />
+        {/* Fade ribbon into background on the left edge */}
         <div
           className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at center, hsl(var(--surface)/0.25) 0%, hsl(var(--background)/0.85) 80%)" }}
+          style={{
+            background:
+              "linear-gradient(to right, hsl(var(--background)) 0%, hsl(var(--background)/0.85) 20%, hsl(var(--background)/0.25) 45%, transparent 70%)",
+          }}
+        />
+        {/* Subtle vignette */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at 80% 50%, transparent 0%, hsl(var(--background)/0.45) 80%)",
+          }}
         />
       </motion.div>
 
-      {/* Soft glow orbs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-1/4 left-1/4 w-72 h-72 md:w-96 md:h-96 rounded-full opacity-20"
-          style={{ background: "radial-gradient(circle, hsl(var(--accent-red)/0.5) 0%, transparent 70%)", filter: "blur(40px)" }}
-        />
-        <div
-          className="absolute bottom-1/3 right-1/4 w-64 h-64 md:w-80 md:h-80 rounded-full opacity-15"
-          style={{ background: "radial-gradient(circle, hsl(var(--highlight)/0.25) 0%, transparent 70%)", filter: "blur(35px)" }}
-        />
-      </div>
-
-      {/* Particles */}
-      <div className="absolute inset-0 pointer-events-none opacity-50">
-        {Array.from({ length: 30 }).map((_, i) => (
-          <motion.span
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-highlight/60"
-            style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }}
-            animate={{ y: [0, -30, 0], opacity: [0.2, 0.8, 0.2] }}
-            transition={{ duration: 6 + Math.random() * 6, repeat: Infinity, delay: Math.random() * 3 }}
-          />
-        ))}
-      </div>
-
-      {/* Centered hero content */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 md:px-10 text-center">
-        <div className="overflow-hidden mb-6">
-          <div className="flex justify-center flex-wrap">
-            {agencyName.split("").map((letter, i) => (
+      {/* Content */}
+      <div className="relative z-10 min-h-screen flex flex-col justify-center px-8 md:px-20 lg:px-28">
+        {/* ANNIE MAKES title */}
+        <div className="overflow-hidden mb-16 md:mb-24">
+          <div className="flex flex-wrap">
+            {AGENCY.split("").map((letter, i) => (
               <motion.span
                 key={i}
-                initial={{ opacity: 0, filter: "blur(20px)", y: 50 }}
-                animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                initial={{ opacity: 0, y: 80, filter: "blur(20px)" }}
+                animate={
+                  stage >= 2
+                    ? { opacity: 1, y: 0, filter: "blur(0px)" }
+                    : { opacity: 0, y: 80, filter: "blur(20px)" }
+                }
                 transition={{
-                  delay: i * 0.05,
-                  duration: 1.2,
+                  delay: stage >= 2 ? i * 0.06 : 0,
+                  duration: 1.1,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="font-display text-highlight font-light tracking-tight inline-block text-5xl sm:text-6xl md:text-8xl lg:text-[9rem] glow-text leading-none"
+                className="font-display font-light text-highlight inline-block leading-[0.95] text-5xl sm:text-7xl md:text-8xl lg:text-[8.5rem] glow-text"
               >
                 {letter === " " ? "\u00A0" : letter}
               </motion.span>
@@ -81,28 +79,61 @@ const Hero = ({ onIntroComplete }: Props) => {
           </div>
         </div>
 
-        <motion.p
-          initial={{ opacity: 0, y: -30, filter: "blur(10px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 1, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="font-light text-xs sm:text-sm md:text-base text-foreground/75 tracking-[0.3em] uppercase mb-12"
-        >
-          Cinematic Storytelling • VFX • AI Content
-        </motion.p>
+        {/* Services list with timeline */}
+        <div className="relative pl-8 md:pl-10 mb-12 max-w-md">
+          {/* Vertical line */}
+          <motion.div
+            initial={{ scaleY: 0 }}
+            animate={{ scaleY: stage >= 2 ? 1 : 0 }}
+            transition={{ duration: 1, delay: 0.9, ease: "easeInOut" }}
+            style={{ transformOrigin: "top" }}
+            className="absolute left-0 top-2 bottom-2 w-px bg-accent-red/70"
+          />
+          <ul className="space-y-5 md:space-y-6">
+            {SERVICES.map((s, i) => (
+              <li key={s} className="relative">
+                {/* Dot */}
+                <motion.span
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={stage >= 2 ? { scale: 1, opacity: 1 } : {}}
+                  transition={{ duration: 0.5, delay: 1.0 + i * 0.15 }}
+                  className="absolute -left-[34px] md:-left-[42px] top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-accent-red"
+                  style={{ boxShadow: "0 0 12px hsl(var(--accent-red))" }}
+                />
+                <motion.span
+                  initial={{ opacity: 0, y: -15 }}
+                  animate={stage >= 2 ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.7, delay: 1.0 + i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+                  className="block tracking-[0.35em] text-sm md:text-base text-foreground/95 font-light"
+                >
+                  {s}
+                </motion.span>
+              </li>
+            ))}
+          </ul>
+        </div>
 
+        {/* VIEW WORK link */}
         <motion.button
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.95, ease: [0.22, 1, 0.36, 1] }}
-          onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-          className="group relative inline-flex items-center gap-3 px-8 md:px-10 py-4 bg-accent-red/90 text-foreground tracking-[0.25em] text-xs font-medium uppercase border border-highlight/20 hover:bg-accent-red transition-colors duration-500"
-          style={{ boxShadow: "0 0 30px hsl(var(--accent-red)/0.35)" }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={stage >= 2 ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.9, delay: 1.7, ease: [0.22, 1, 0.36, 1] }}
+          onClick={() => document.getElementById("work")?.scrollIntoView({ behavior: "smooth" })}
+          className="group inline-flex items-center gap-5 tracking-[0.35em] text-xs md:text-sm text-highlight/90 hover:text-highlight transition-colors w-fit"
         >
-          <span className="relative z-10">Get In Touch</span>
+          <span>VIEW WORK</span>
+          <span className="relative block w-16 md:w-20 h-px bg-highlight/70 overflow-hidden">
+            <motion.span
+              className="absolute inset-y-0 left-0 w-full bg-highlight"
+              initial={{ x: "-100%" }}
+              animate={stage >= 2 ? { x: "0%" } : {}}
+              transition={{ duration: 0.9, delay: 1.9, ease: [0.22, 1, 0.36, 1] }}
+            />
+          </span>
           <motion.span
-            className="relative z-10"
             animate={{ x: [0, 6, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            className="text-highlight"
           >
             →
           </motion.span>
@@ -112,15 +143,13 @@ const Hero = ({ onIntroComplete }: Props) => {
       {/* Scroll cue */}
       <motion.button
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 1.3 }}
+        animate={stage >= 2 ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 1, delay: 2.1 }}
         onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-highlight/70 hover:text-highlight transition-colors"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-highlight/80 hover:text-highlight transition-colors"
       >
-        <span className="tracking-[0.3em] text-[10px] uppercase">Scroll</span>
-        <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}>
-          <ArrowDown size={18} strokeWidth={1.5} />
-        </motion.div>
+        <Mouse size={22} strokeWidth={1.25} />
+        <span className="tracking-[0.35em] text-[10px] uppercase">Scroll to Discover</span>
       </motion.button>
     </section>
   );
