@@ -22,32 +22,36 @@ const Hero = ({ onIntroComplete }: Props) => {
   }, [onIntroComplete]);
 
   return (
-    <section id="home" className="relative min-h-screen w-full overflow-hidden bg-background">
+    <section
+      id="home"
+      className="relative min-h-screen w-full overflow-hidden"
+      style={{ backgroundColor: "#1a0402" }}
+    >
       {/* Ribbon pattern — right side only */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: stage >= 1 ? 1 : 0 }}
-        transition={{ duration: 1.2, ease: "easeInOut" }}
-        className="absolute inset-y-0 right-0 w-full md:w-[70%] pointer-events-none"
+        transition={{ duration: 1.4, ease: "easeInOut" }}
+        className="absolute inset-0 pointer-events-none"
       >
         <div
           className="absolute inset-0 bg-no-repeat bg-cover bg-right animate-ribbon"
-          style={{ backgroundImage: `url(${ribbon})` }}
+          style={{ backgroundImage: `url(${ribbon})`, mixBlendMode: "screen", opacity: 0.85 }}
         />
-        {/* Fade ribbon into background on the left edge */}
+        {/* Fade ribbon into dark on the left edge */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to right, hsl(var(--background)) 0%, hsl(var(--background)/0.85) 20%, hsl(var(--background)/0.25) 45%, transparent 70%)",
+              "linear-gradient(to right, #1a0402 0%, rgba(26,4,2,0.95) 22%, rgba(26,4,2,0.55) 45%, rgba(26,4,2,0.15) 70%, transparent 100%)",
           }}
         />
-        {/* Subtle vignette */}
+        {/* Vignette to deepen edges */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at 80% 50%, transparent 0%, hsl(var(--background)/0.45) 80%)",
+              "radial-gradient(ellipse at 78% 55%, transparent 0%, rgba(10,2,1,0.55) 75%, rgba(10,2,1,0.85) 100%)",
           }}
         />
       </motion.div>
