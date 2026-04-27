@@ -86,7 +86,7 @@ const Hero = ({ onIntroComplete }: Props) => {
                   duration: 1.1,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="font-display font-light text-highlight inline-block leading-[0.95] text-5xl sm:text-7xl md:text-8xl lg:text-[8.5rem] glow-text"
+                className="font-display font-light text-highlight inline-block leading-[0.95] text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl glow-text"
               >
                 {letter === " " ? "\u00A0" : letter}
               </motion.span>
