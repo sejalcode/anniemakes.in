@@ -34,35 +34,42 @@ const Hero = ({ onIntroComplete }: Props) => {
         transition={{ duration: 1.4, ease: "easeInOut" }}
         className="absolute inset-0 pointer-events-none"
       >
-        {/* Tilted golden ribbon, sweeping from bottom-left to top-right */}
-        <div
-          className="absolute -inset-[15%]"
-          style={{ transform: "rotate(-18deg)", transformOrigin: "65% 55%" }}
-        >
+        {/* Flowing ribbon — already diagonal in the asset */}
+        <div className="absolute inset-0">
           <div
-            className="absolute inset-0 bg-no-repeat bg-cover bg-right animate-ribbon"
+            className="absolute inset-0 bg-no-repeat bg-cover bg-center animate-ribbon"
             style={{
               backgroundImage: `url(${ribbon})`,
-              mixBlendMode: "screen",
               opacity: 1,
-              filter: "sepia(1) saturate(2.8) hue-rotate(-12deg) brightness(1.15)",
             }}
           />
         </div>
-        {/* Fade ribbon into dark on the left edge — leave right side untouched */}
+
+        {/* Reddish-brown ambient glow around the ribbon edges */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to right, #1a0402 0%, rgba(26,4,2,0.92) 18%, rgba(26,4,2,0.45) 38%, rgba(26,4,2,0.05) 60%, transparent 80%)",
+              "radial-gradient(ellipse 65% 55% at 65% 50%, rgba(140, 50, 25, 0.28) 0%, rgba(90, 25, 12, 0.18) 40%, transparent 75%)",
+            mixBlendMode: "screen",
           }}
         />
-        {/* Vignette to deepen edges */}
+
+        {/* Fade ribbon into dark on the left edge — keep title legible */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at 80% 50%, transparent 0%, rgba(10,2,1,0.45) 80%, rgba(10,2,1,0.85) 100%)",
+              "linear-gradient(to right, #1a0402 0%, rgba(26,4,2,0.95) 20%, rgba(26,4,2,0.55) 38%, rgba(26,4,2,0.1) 58%, transparent 78%)",
+          }}
+        />
+
+        {/* Reddish-brown vignette on the outer borders */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at 70% 50%, transparent 35%, rgba(60, 18, 10, 0.55) 80%, rgba(30, 8, 4, 0.85) 100%)",
           }}
         />
       </motion.div>
