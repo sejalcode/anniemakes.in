@@ -119,9 +119,9 @@ const Contact = () => {
                 <p className="tracking-[0.35em] text-xs text-accent-red">OR REACH US DIRECTLY</p>
                 <span className="w-12 h-px bg-accent-red/60" />
               </div>
-              <a href="mailto:hello@anniemakes.com" className="inline-flex items-center gap-3 text-foreground hover:text-highlight transition">
+              <a href="mailto:anniemakesstudio@gmail.com" className="inline-flex items-center gap-3 text-foreground hover:text-highlight transition">
                 <Mail size={18} className="text-accent-red" />
-                hello@anniemakes.com
+                anniemakesstudio@gmail.com
               </a>
             </div>
           </Reveal>
