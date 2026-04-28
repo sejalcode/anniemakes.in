@@ -15,9 +15,9 @@ const Hero = ({ onIntroComplete }: Props) => {
   const [stage, setStage] = useState(0);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setStage(1), 500);   // ribbon pattern fades in
-    const t2 = setTimeout(() => setStage(2), 1600);  // title + rest reveal
-    const t3 = setTimeout(() => onIntroComplete(), 2400); // header appears
+    const t1 = setTimeout(() => setStage(1), 400);   // ribbon pattern fades in
+    const t2 = setTimeout(() => setStage(2), 1800);  // title + rest reveal
+    const t3 = setTimeout(() => onIntroComplete(), 2800); // header appears
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [onIntroComplete]);
 
@@ -37,7 +37,7 @@ const Hero = ({ onIntroComplete }: Props) => {
         {/* Flowing ribbon — already diagonal in the asset */}
         <div className="absolute inset-0">
           <div
-            className="absolute inset-0 bg-no-repeat bg-cover bg-center animate-ribbon"
+            className="absolute inset-0 bg-no-repeat bg-cover bg-center"
             style={{
               backgroundImage: `url(${ribbon})`,
               opacity: 1,
@@ -153,8 +153,9 @@ const Hero = ({ onIntroComplete }: Props) => {
             />
           </span>
           <motion.span
-            animate={{ x: [0, 6, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            initial={{ x: -8, opacity: 0 }}
+            animate={stage >= 2 ? { x: 0, opacity: 1 } : {}}
+            transition={{ duration: 0.9, delay: 2.0, ease: [0.22, 1, 0.36, 1] }}
             className="text-highlight"
           >
             →
