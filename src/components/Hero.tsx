@@ -15,9 +15,9 @@ const Hero = ({ onIntroComplete }: Props) => {
   const [stage, setStage] = useState(0);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setStage(1), 500);   // ribbon pattern fades in
-    const t2 = setTimeout(() => setStage(2), 1600);  // title + rest reveal
-    const t3 = setTimeout(() => onIntroComplete(), 2400); // header appears
+    const t1 = setTimeout(() => setStage(1), 400);   // ribbon pattern fades in
+    const t2 = setTimeout(() => setStage(2), 1800);  // title + rest reveal
+    const t3 = setTimeout(() => onIntroComplete(), 2800); // header appears
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [onIntroComplete]);
 
