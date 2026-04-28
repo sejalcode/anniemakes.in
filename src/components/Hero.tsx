@@ -153,8 +153,9 @@ const Hero = ({ onIntroComplete }: Props) => {
             />
           </span>
           <motion.span
-            animate={{ x: [0, 6, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            initial={{ x: -8, opacity: 0 }}
+            animate={stage >= 2 ? { x: 0, opacity: 1 } : {}}
+            transition={{ duration: 0.9, delay: 2.0, ease: [0.22, 1, 0.36, 1] }}
             className="text-highlight"
           >
             →
