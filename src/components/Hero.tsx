@@ -7,7 +7,7 @@ interface Props {
   onIntroComplete: () => void;
 }
 
-const SERVICES = ["VFX", "AI CONTENT", "ANIMATION", "VIDEO PRODUCTION"];
+const SERVICES = ["VFX", "3D MODELLING", "AI CONTENT", "ANIMATION", "VIDEO PRODUCTION"];
 const AGENCY = "ANNIE MAKES";
 
 const Hero = ({ onIntroComplete }: Props) => {
