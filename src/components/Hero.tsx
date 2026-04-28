@@ -37,7 +37,7 @@ const Hero = ({ onIntroComplete }: Props) => {
         {/* Flowing ribbon — already diagonal in the asset */}
         <div className="absolute inset-0">
           <div
-            className="absolute inset-0 bg-no-repeat bg-cover bg-center animate-ribbon"
+            className="absolute inset-0 bg-no-repeat bg-cover bg-center"
             style={{
               backgroundImage: `url(${ribbon})`,
               opacity: 1,
