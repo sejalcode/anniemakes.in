@@ -236,7 +236,7 @@ const Panel = ({
             color: `hsl(${s.hue})`,
             textShadow: `0 0 24px hsl(${s.hue} / 0.5), 0 2px 0 hsl(0 0% 0% / 0.3)`,
           }}
-          className="font-display font-light tracking-[0.18em] text-6xl md:text-7xl lg:text-[7.5rem] leading-[0.95]"
+          className="font-display font-light tracking-[0.18em] text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-[0.95] break-words max-w-full"
         >
           {s.title}
         </motion.h3>
