@@ -1,5 +1,14 @@
-import { motion, useScroll, useTransform, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
-import { useRef, useState } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useMotionValue,
+  useReducedMotion,
+  useVelocity,
+  MotionValue,
+} from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 import { Box, Brain, Film, Hexagon, Layers3 } from "lucide-react";
 import { Reveal } from "./CinematicSection";
 import bg from "@/assets/services-bg.jpeg";
@@ -9,8 +18,10 @@ interface ServiceItem {
   title: string;
   icon: typeof Box;
   desc: string;
-  /** accent hue for the cinematic glow per service */
+  /** glow color in HSL triplet */
   hue: string;
+  /** transition style label */
+  flavor: "slit" | "depth" | "glitch" | "pulse" | "fluid";
 }
 
 const SERVICES: ServiceItem[] = [
@@ -19,203 +30,377 @@ const SERVICES: ServiceItem[] = [
     title: "VFX",
     icon: Box,
     desc: "Cinematic compositing and high-end visual effects that bring imagination to life with precision.",
-    hue: "22 95% 60%",   // warm orange
+    hue: "28 95% 60%",
+    flavor: "slit",
   },
   {
     num: "02",
     title: "3D MODELS",
     icon: Layers3,
     desc: "Sculpted geometry, materials and lighting — from product renders to fully realized cinematic worlds.",
-    hue: "8 78% 58%",    // coral red
+    hue: "210 15% 82%", // chrome / silver
+    flavor: "depth",
   },
   {
     num: "03",
     title: "AI CONTENT",
     icon: Brain,
     desc: "AI-driven content creation and workflows that accelerate ideas and elevate creative storytelling.",
-    hue: "200 90% 65%",  // electric blue
+    hue: "315 90% 65%", // neon magenta
+    flavor: "glitch",
   },
   {
     num: "04",
     title: "VIDEO EDITING",
     icon: Film,
     desc: "Story-driven editing that shapes raw footage into powerful, engaging, emotionally resonant films.",
-    hue: "44 100% 75%",  // warm highlight
+    hue: "210 95% 62%", // electric blue
+    flavor: "pulse",
   },
   {
     num: "05",
     title: "ANIMATION",
     icon: Hexagon,
     desc: "Motion graphics and fluid animation that communicate ideas through movement, style and emotion.",
-    hue: "280 70% 70%",  // violet
+    hue: "180 80% 70%", // soft cyan
+    flavor: "fluid",
   },
 ];
 
-/* ---------- Service Row: curtain stretch + per-service hue ---------- */
-const ServiceRow = ({ s, index, hovered, setHovered }: {
+/* ---------- Useful: detect mobile to switch layout ---------- */
+const useIsDesktop = () => {
+  const [is, setIs] = useState(
+    typeof window !== "undefined" ? window.matchMedia("(min-width: 768px)").matches : true
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const onChange = () => setIs(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return is;
+};
+
+/* ---------- Wireframe rotating cube (for 3D MODELS panel) ---------- */
+const WireframeCube = ({ hue }: { hue: string }) => (
+  <motion.svg
+    aria-hidden
+    viewBox="-60 -60 120 120"
+    className="absolute inset-0 m-auto w-[60%] h-[60%] opacity-40"
+    style={{ color: `hsl(${hue})` }}
+    animate={{ rotate: 360 }}
+    transition={{ duration: 28, ease: "linear", repeat: Infinity }}
+  >
+    <g
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="0.6"
+      style={{ filter: `drop-shadow(0 0 8px hsl(${hue} / 0.8))` }}
+    >
+      {/* back face */}
+      <rect x="-28" y="-28" width="56" height="56" />
+      {/* front face */}
+      <rect x="-40" y="-40" width="56" height="56" />
+      {/* connectors */}
+      <line x1="-28" y1="-28" x2="-40" y2="-40" />
+      <line x1="28" y1="-28" x2="16" y2="-40" />
+      <line x1="28" y1="28" x2="16" y2="16" />
+      <line x1="-28" y1="28" x2="-40" y2="16" />
+    </g>
+  </motion.svg>
+);
+
+/* ---------- Per-service background visual ---------- */
+const PanelBackground = ({ s, progress }: { s: ServiceItem; progress: MotionValue<number> }) => {
+  // Slit-scan reveal: clip-path opens horizontally
+  const slitClip = useTransform(progress, [0, 1], ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]);
+  // Depth parallax for 3D MODELS — model holds while text passes
+  const depthX = useTransform(progress, [0, 1], ["-15%", "15%"]);
+  // Glitch jitter
+  const glitchX = useTransform(progress, [0, 0.3, 0.5, 0.7, 1], ["0px", "-6px", "4px", "-3px", "0px"]);
+
+  const common = (
+    <div
+      className="absolute inset-0"
+      style={{
+        background: `radial-gradient(ellipse 70% 60% at 50% 50%, hsl(${s.hue} / 0.28), transparent 70%)`,
+        mixBlendMode: "screen",
+      }}
+    />
+  );
+
+  switch (s.flavor) {
+    case "slit":
+      return (
+        <>
+          <motion.div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${bg})`, clipPath: slitClip as unknown as string, opacity: 0.55 }}
+          />
+          {common}
+        </>
+      );
+    case "depth":
+      return (
+        <>
+          <motion.div className="absolute inset-0" style={{ x: depthX }}>
+            <WireframeCube hue={s.hue} />
+          </motion.div>
+          {common}
+        </>
+      );
+    case "glitch":
+      return (
+        <>
+          <motion.div
+            className="absolute inset-0 bg-cover bg-center mix-blend-screen"
+            style={{
+              backgroundImage: `url(${bg})`,
+              x: glitchX,
+              opacity: 0.5,
+              filter: `hue-rotate(280deg) saturate(1.4)`,
+            }}
+          />
+          {common}
+        </>
+      );
+    case "pulse":
+      return (
+        <>
+          <motion.div
+            className="absolute inset-0"
+            animate={{ opacity: [0.25, 0.55, 0.25] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            style={{
+              background: `radial-gradient(circle at 50% 50%, hsl(${s.hue} / 0.45), transparent 65%)`,
+            }}
+          />
+          {common}
+        </>
+      );
+    case "fluid":
+      return (
+        <>
+          <motion.div
+            className="absolute inset-0"
+            animate={{
+              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+            }}
+            transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+            style={{
+              background: `linear-gradient(120deg, hsl(${s.hue} / 0.35), transparent 40%, hsl(${s.hue} / 0.25) 80%)`,
+              backgroundSize: "200% 200%",
+            }}
+          />
+          {common}
+        </>
+      );
+  }
+};
+
+/* ---------- A single horizontal panel ---------- */
+const Panel = ({
+  s,
+  index,
+  count,
+  trackProgress,
+}: {
   s: ServiceItem;
   index: number;
-  hovered: number | null;
-  setHovered: (i: number | null) => void;
+  count: number;
+  trackProgress: MotionValue<number>;
 }) => {
-  const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const Icon = s.icon;
 
-  // Curtain effect: title stretches vertically as it crosses the viewport center
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "center center", "end start"],
-  });
-  const scaleY = useTransform(scrollYProgress, [0, 0.5, 1], [1.6, 1, 1.6]);
-  const opacity = useTransform(scrollYProgress, [0, 0.25, 0.75, 1], [0.15, 1, 1, 0.15]);
-  const blur = useTransform(scrollYProgress, [0, 0.5, 1], ["8px", "0px", "8px"]);
-  const filterMV = useTransform(blur, (b) => `blur(${b})`);
+  // local progress: 0 when entering center, 1 when leaving center
+  const start = index / count;
+  const end = (index + 1) / count;
+  const localProgress = useTransform(trackProgress, [start, end], [0, 1]);
 
-  const isHovered = hovered === index;
+  // Curtain stretch: scaleY peaks at center
+  const centerSignal = useTransform(localProgress, [0, 0.5, 1], [0, 1, 0]);
+  const scaleY = useTransform(centerSignal, [0, 1], [1.6, 1]);
+  const opacity = useTransform(centerSignal, [0, 0.4, 1], [0.25, 0.85, 1]);
+  const blurMV = useTransform(centerSignal, [0, 1], ["6px", "0px"]);
+  const filterMV = useTransform(blurMV, (b) => `blur(${b})`);
 
   return (
-    <motion.div
-      ref={ref}
-      onMouseEnter={() => setHovered(index)}
-      onMouseLeave={() => setHovered(null)}
-      initial={reduce ? false : { opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-15% 0px -15% 0px" }}
-      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-      className="relative border-t border-highlight/15 py-10 md:py-14 group cursor-pointer"
-      style={{
-        // expose hue as CSS var for child glows
-        // @ts-expect-error custom prop
-        "--svc-hue": s.hue,
-      }}
+    <div
+      className="relative shrink-0 h-screen flex items-center justify-center px-8 md:px-16"
+      style={{ width: "80vw" }}
     >
-      {/* hover wash — service-specific hue */}
-      <motion.div
-        aria-hidden
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background: `radial-gradient(ellipse 60% 80% at 50% 50%, hsl(${s.hue} / 0.18), transparent 70%)`,
-        }}
-      />
-
-      <div className="relative grid grid-cols-12 items-center gap-4 md:gap-8 px-6 md:px-10">
-        {/* Number */}
-        <div className="col-span-2 md:col-span-1">
-          <span className="font-display text-sm md:text-base text-foreground/50 tracking-[0.3em]">
-            {s.num}
-          </span>
-        </div>
-
-        {/* Icon */}
-        <div className="col-span-2 md:col-span-1 flex justify-center">
-          <motion.div
-            animate={isHovered ? { rotate: 360, scale: 1.1 } : { rotate: 0, scale: 1 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Icon
-              size={36}
-              strokeWidth={1}
-              className="text-highlight/85"
-              style={{ filter: isHovered ? `drop-shadow(0 0 14px hsl(${s.hue} / 0.8))` : "none" }}
-            />
-          </motion.div>
-        </div>
-
-        {/* Title — curtain stretch */}
-        <div className="col-span-8 md:col-span-6 overflow-hidden">
-          <motion.h3
-            style={{
-              scaleY: reduce ? 1 : scaleY,
-              opacity: reduce ? 1 : opacity,
-              filter: reduce ? "none" : filterMV,
-              transformOrigin: "center",
-              color: isHovered ? `hsl(${s.hue})` : undefined,
-              textShadow: isHovered
-                ? `0 0 24px hsl(${s.hue} / 0.6), 0 0 60px hsl(${s.hue} / 0.35)`
-                : "0 0 18px hsl(var(--highlight) / 0.25)",
-            }}
-            className="font-display font-light text-highlight tracking-[0.18em] text-3xl sm:text-4xl md:text-6xl lg:text-7xl leading-none transition-colors duration-500"
-          >
-            {s.title}
-          </motion.h3>
-        </div>
-
-        {/* Description */}
-        <div className="col-span-12 md:col-span-4">
-          <motion.p
-            initial={{ opacity: 0.6 }}
-            animate={{ opacity: isHovered ? 1 : 0.7, x: isHovered ? 0 : -4 }}
-            transition={{ duration: 0.5 }}
-            className="text-sm text-foreground/80 leading-relaxed font-light"
-          >
-            {s.desc}
-          </motion.p>
-        </div>
+      {/* per-panel background */}
+      <div className="absolute inset-6 md:inset-10 rounded-lg overflow-hidden border border-highlight/10">
+        <PanelBackground s={s} progress={localProgress} />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/60" />
       </div>
-    </motion.div>
+
+      {/* foreground */}
+      <div className="relative z-10 w-full max-w-4xl">
+        <div className="flex items-center gap-4 mb-6">
+          <span className="font-display text-sm tracking-[0.35em] text-foreground/55">{s.num}</span>
+          <span className="h-px flex-1 bg-highlight/25" />
+          <Icon
+            size={32}
+            strokeWidth={1}
+            className="text-highlight/85"
+            style={{ filter: `drop-shadow(0 0 12px hsl(${s.hue} / 0.7))` }}
+          />
+        </div>
+
+        <motion.h3
+          style={{
+            scaleY: reduce ? 1 : scaleY,
+            opacity: reduce ? 1 : opacity,
+            filter: reduce ? "none" : filterMV,
+            transformOrigin: "center",
+            color: `hsl(${s.hue})`,
+            textShadow: `0 0 28px hsl(${s.hue} / 0.55), 0 0 80px hsl(${s.hue} / 0.3)`,
+          }}
+          className="font-display font-light tracking-[0.18em] text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-none"
+        >
+          {s.title}
+        </motion.h3>
+
+        <div className="mt-6 w-16 h-px" style={{ background: `hsl(${s.hue} / 0.7)` }} />
+
+        <p className="mt-6 max-w-xl text-base md:text-lg text-foreground/80 leading-relaxed font-light">
+          {s.desc}
+        </p>
+      </div>
+    </div>
   );
 };
 
+/* ---------- Mobile: simple vertical snap list ---------- */
+const MobileServices = () => (
+  <div className="px-6 space-y-6">
+    {SERVICES.map((s) => {
+      const Icon = s.icon;
+      return (
+        <Reveal key={s.title}>
+          <div
+            className="relative rounded-md p-6 border border-highlight/15 overflow-hidden glass-card"
+            style={{ boxShadow: `0 0 30px hsl(${s.hue} / 0.15)` }}
+          >
+            <div
+              aria-hidden
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: `radial-gradient(ellipse 70% 60% at 50% 0%, hsl(${s.hue} / 0.18), transparent 70%)`,
+              }}
+            />
+            <div className="relative flex items-start gap-4">
+              <Icon
+                size={40}
+                strokeWidth={1}
+                className="text-highlight/85 shrink-0"
+                style={{ filter: `drop-shadow(0 0 10px hsl(${s.hue} / 0.6))` }}
+              />
+              <div className="flex-1">
+                <p className="text-xs text-foreground/55 tracking-[0.3em]">{s.num}</p>
+                <h3
+                  className="font-display text-3xl tracking-[0.15em] mt-1"
+                  style={{
+                    color: `hsl(${s.hue})`,
+                    textShadow: `0 0 18px hsl(${s.hue} / 0.45)`,
+                  }}
+                >
+                  {s.title}
+                </h3>
+                <div className="w-10 h-px my-3" style={{ background: `hsl(${s.hue} / 0.7)` }} />
+                <p className="text-sm text-foreground/80 leading-relaxed font-light">{s.desc}</p>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      );
+    })}
+  </div>
+);
+
 /* ---------- Section ---------- */
 const Services = () => {
-  const ref = useRef<HTMLDivElement>(null);
+  const isDesktop = useIsDesktop();
   const reduce = useReducedMotion();
-  const [hovered, setHovered] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+  // Scroll progress through the tall sticky container
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
 
-  // Cursor glow tracking
-  const cursorX = useMotionValue(-200);
-  const cursorY = useMotionValue(-200);
-  const sx = useSpring(cursorX, { stiffness: 180, damping: 22, mass: 0.4 });
-  const sy = useSpring(cursorY, { stiffness: 180, damping: 22, mass: 0.4 });
+  // Smooth the progress for the horizontal track
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 26, mass: 0.4 });
 
-  const onMove = (e: React.MouseEvent) => {
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    cursorX.set(e.clientX - rect.left);
-    cursorY.set(e.clientY - rect.top);
-  };
+  // Translate the inner track from 0% to -80% (5 panels × 80vw, but section is 100vw — leave room for padding)
+  const x = useTransform(smoothProgress, [0, 1], ["0%", "-80%"]);
 
-  const activeHue = hovered !== null ? SERVICES[hovered].hue : "44 100% 88%";
-  // warp intensity rises on hover for the "distortion field" feel
-  const warpScale = hovered !== null ? 38 : 18;
-  const warpDur = hovered !== null ? "6s" : "14s";
+  // Velocity → drives warp intensity
+  const velocity = useVelocity(smoothProgress);
+  const absVel = useTransform(velocity, (v) => Math.min(Math.abs(v) * 60, 1));
+  const warpScale = useTransform(absVel, [0, 1], [14, 46]);
+  const warpScaleSpring = useSpring(warpScale, { stiffness: 90, damping: 20 });
+  const [warpScaleNum, setWarpScaleNum] = useState(14);
+  useEffect(() => warpScaleSpring.on("change", setWarpScaleNum), [warpScaleSpring]);
+
+  // Active panel for ambient hue
+  const indexMV = useTransform(smoothProgress, (p) =>
+    Math.min(SERVICES.length - 1, Math.max(0, Math.floor(p * SERVICES.length)))
+  );
+  const [activeIdx, setActiveIdx] = useState(0);
+  useEffect(() => indexMV.on("change", setActiveIdx), [indexMV]);
+  const activeHue = SERVICES[activeIdx].hue;
+
+  // Progress bar width
+  const progressWidth = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
+
+  if (!isDesktop) {
+    return (
+      <section id="services" className="relative w-full py-24 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <img src={bg} alt="" className="w-full h-full object-cover opacity-30" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background/90" />
+        </div>
+        <div className="relative z-10 text-center mb-12 px-6">
+          <p className="tracking-[0.4em] text-xs text-highlight/80 mb-2">WHAT WE DO</p>
+          <div className="mx-auto w-16 h-px bg-highlight/60 mb-4" />
+          <h2 className="font-display text-5xl text-highlight font-light glow-text tracking-[0.15em]">
+            SERVICES
+          </h2>
+        </div>
+        <div className="relative z-10">
+          <MobileServices />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
       id="services"
-      ref={ref}
-      onMouseMove={onMove}
-      onMouseLeave={() => { cursorX.set(-200); cursorY.set(-200); }}
-      className="relative w-full overflow-hidden min-h-screen py-24"
+      ref={sectionRef}
+      className="relative w-full"
+      style={{ height: `${SERVICES.length * 100}vh` }}
     >
-      {/* Heat-haze warp filter — animates faster on hover */}
+      {/* SVG warp filter — scale driven by scroll velocity */}
       <svg className="absolute -z-10 w-0 h-0" aria-hidden="true">
         <defs>
           <filter id="services-warp" x="-10%" y="-10%" width="120%" height="120%">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.01 0.02"
-              numOctaves="2"
-              seed="7"
-              result="noise"
-            >
+            <feTurbulence type="fractalNoise" baseFrequency="0.012 0.022" numOctaves="2" seed="5" result="noise">
               <animate
                 attributeName="baseFrequency"
-                dur={warpDur}
-                values="0.010 0.020; 0.020 0.034; 0.010 0.020"
+                dur="12s"
+                values="0.012 0.022; 0.020 0.034; 0.012 0.022"
                 repeatCount="indefinite"
               />
             </feTurbulence>
             <feDisplacementMap
               in="SourceGraphic"
               in2="noise"
-              scale={warpScale}
+              scale={warpScaleNum}
               xChannelSelector="R"
               yChannelSelector="G"
             />
@@ -223,81 +408,80 @@ const Services = () => {
         </defs>
       </svg>
 
-      {/* Background ribbon — warped */}
-      <motion.div
-        aria-hidden
-        initial={reduce ? false : { y: 80, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        viewport={{ once: true, margin: "-15% 0px -15% 0px" }}
-        transition={{ duration: 0.9, ease: "easeOut" }}
-        className="absolute inset-0 pointer-events-none"
-      >
-        <motion.img
-          src={bg}
-          alt=""
-          style={{ y: bgY, scale: 1.1, filter: "url(#services-warp)" }}
-          className="absolute inset-0 w-full h-full object-cover will-change-transform"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/55 to-background/80" />
-        {/* dynamic ambient glow tied to active service */}
+      {/* Sticky viewport */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden">
+        {/* Warped ambient background */}
         <motion.div
-          className="absolute inset-0 transition-colors"
-          style={{
-            background: `radial-gradient(ellipse 60% 50% at 50% 50%, hsl(${activeHue} / 0.18), transparent 70%)`,
-            mixBlendMode: "screen",
-          }}
-        />
-      </motion.div>
+          aria-hidden
+          initial={reduce ? false : { y: 80, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: "-15% 0px -15% 0px" }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
+          className="absolute inset-0 pointer-events-none"
+        >
+          <div
+            className="absolute inset-0 bg-cover bg-center will-change-transform"
+            style={{ backgroundImage: `url(${bg})`, filter: "url(#services-warp)", opacity: 0.55 }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/55 to-background/85" />
+          <motion.div
+            className="absolute inset-0"
+            style={{
+              background: `radial-gradient(ellipse 60% 50% at 50% 50%, hsl(${activeHue} / 0.22), transparent 70%)`,
+              mixBlendMode: "screen",
+              transition: "background 600ms ease",
+            }}
+          />
+        </motion.div>
 
-      {/* Custom cursor glow */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute z-20 rounded-full hidden md:block"
-        style={{
-          x: sx,
-          y: sy,
-          translateX: "-50%",
-          translateY: "-50%",
-          width: 360,
-          height: 360,
-          background: `radial-gradient(circle, hsl(${activeHue} / 0.18) 0%, hsl(${activeHue} / 0.06) 35%, transparent 65%)`,
-          mixBlendMode: "screen",
-        }}
-      />
-
-      {/* Foreground */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-10">
-        <div className="text-center mb-16">
+        {/* Header */}
+        <div className="absolute top-12 left-0 right-0 z-20 text-center pointer-events-none">
           <Reveal order={0}>
             <p className="tracking-[0.4em] text-xs text-highlight/80 mb-2">WHAT WE DO</p>
           </Reveal>
           <Reveal order={1}>
-            <div className="mx-auto w-16 h-px bg-highlight/60 mb-4" />
+            <div className="mx-auto w-16 h-px bg-highlight/60 mb-3" />
           </Reveal>
           <Reveal order={2}>
-            <h2 className="font-display text-5xl md:text-7xl text-highlight font-light glow-text tracking-[0.15em]">
+            <h2 className="font-display text-4xl md:text-6xl text-highlight font-light glow-text tracking-[0.15em]">
               SERVICES
             </h2>
           </Reveal>
-          <Reveal order={3}>
-            <p className="mt-6 text-foreground/80 max-w-xl mx-auto font-light">
-              End-to-end creative production services crafted for storytellers,<br className="hidden md:block" />
-              brands, and forward-thinking visionaries.
-            </p>
-          </Reveal>
         </div>
 
-        {/* Film-strip ribbon */}
-        <div className="border-b border-highlight/15">
+        {/* Horizontal film strip */}
+        <motion.div style={{ x }} className="absolute inset-0 flex items-center will-change-transform">
+          {/* leading spacer to center first panel */}
+          <div className="shrink-0" style={{ width: "10vw" }} />
           {SERVICES.map((s, i) => (
-            <ServiceRow
-              key={s.title}
-              s={s}
-              index={i}
-              hovered={hovered}
-              setHovered={setHovered}
-            />
+            <Panel key={s.title} s={s} index={i} count={SERVICES.length} trackProgress={smoothProgress} />
           ))}
+          <div className="shrink-0" style={{ width: "10vw" }} />
+        </motion.div>
+
+        {/* Progress seek bar */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[60%] max-w-2xl z-20">
+          <div className="relative h-px bg-highlight/15 overflow-hidden">
+            <motion.div
+              className="absolute inset-y-0 left-0"
+              style={{
+                width: progressWidth,
+                background: `linear-gradient(90deg, transparent, hsl(${activeHue}) 60%, hsl(${activeHue}))`,
+                boxShadow: `0 0 14px hsl(${activeHue} / 0.7)`,
+              }}
+            />
+          </div>
+          <div className="mt-3 flex justify-between text-[10px] tracking-[0.3em] text-foreground/55">
+            {SERVICES.map((s, i) => (
+              <span
+                key={s.title}
+                className="transition-colors"
+                style={{ color: i === activeIdx ? `hsl(${s.hue})` : undefined }}
+              >
+                {s.num}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </section>
