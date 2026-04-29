@@ -216,7 +216,7 @@ const Panel = ({
         <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background/60" />
       </div>
 
-      <div className="relative z-10 w-full max-w-5xl flex flex-col items-start">
+      <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-start">
         <div className="flex items-center gap-4 mb-6 w-full">
           <span className="font-display text-sm tracking-[0.35em] text-foreground/60">{s.num}</span>
           <span className="h-px flex-1 bg-highlight/25" />
@@ -236,7 +236,7 @@ const Panel = ({
             color: `hsl(${s.hue})`,
             textShadow: `0 0 24px hsl(${s.hue} / 0.5), 0 2px 0 hsl(0 0% 0% / 0.3)`,
           }}
-          className="font-display font-light tracking-[0.18em] text-6xl md:text-7xl lg:text-8xl xl:text-9xl leading-[0.95] break-words max-w-full"
+          className="font-display font-light tracking-[0.15em] text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[1] break-words w-full"
         >
           {s.title}
         </motion.h3>
