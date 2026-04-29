@@ -27,6 +27,29 @@ const Hero = ({ onIntroComplete }: Props) => {
       className="relative min-h-screen w-full overflow-hidden"
       style={{ backgroundColor: "#1a0402" }}
     >
+      {/* SVG turbulence filter — creates wavy heat-haze warp on the ribbon */}
+      <svg className="absolute -z-10 w-0 h-0" aria-hidden="true">
+        <defs>
+          <filter id="ribbon-warp" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.012 0.022"
+              numOctaves="2"
+              seed="3"
+              result="noise"
+            >
+              <animate
+                attributeName="baseFrequency"
+                dur="14s"
+                values="0.012 0.022; 0.018 0.030; 0.012 0.022"
+                repeatCount="indefinite"
+              />
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="22" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
+
       {/* Ribbon pattern — right side only */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -34,13 +57,26 @@ const Hero = ({ onIntroComplete }: Props) => {
         transition={{ duration: 1.4, ease: "easeInOut" }}
         className="absolute inset-0 pointer-events-none"
       >
-        {/* Flowing ribbon — already diagonal in the asset */}
-        <div className="absolute inset-0">
-          <div
-            className="absolute inset-0 bg-no-repeat bg-cover bg-center"
+        {/* Flowing ribbon — vertical curtain stretch + wavy warp */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
+            className="absolute inset-0 bg-no-repeat bg-cover bg-center will-change-transform"
             style={{
               backgroundImage: `url(${ribbon})`,
               opacity: 1,
+              filter: "url(#ribbon-warp)",
+              transformOrigin: "center",
+            }}
+            animate={{
+              scaleY: [1.04, 1.12, 1.04],
+              scaleX: [1.02, 1.06, 1.02],
+              y: ["-1%", "1.5%", "-1%"],
+            }}
+            transition={{
+              duration: 11,
+              ease: "easeInOut",
+              repeat: Infinity,
+              repeatType: "loop",
             }}
           />
         </div>
