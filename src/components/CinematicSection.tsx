@@ -30,8 +30,7 @@ export const CinematicSection = ({
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         initial={reduce ? false : { y: 80, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        viewport={{ once: true, margin: "-15% 0px -15% 0px" }}
+        animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         {background}
@@ -39,8 +38,7 @@ export const CinematicSection = ({
       <motion.div
         className="relative z-10"
         initial={reduce ? false : { opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-15% 0px -15% 0px" }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: foregroundDelay, ease: "easeOut" }}
       >
         {children}
@@ -76,8 +74,7 @@ export const Reveal = ({
   return (
     <MotionTag
       initial={reduce ? false : { opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10% 0px -10% 0px" }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.9, delay: 0.35 + delay + order * 0.12, ease: [0.22, 1, 0.36, 1] }}
       className={className}
       style={style}
