@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { PROJECTS } from "@/data/projects";
 import { CinematicSection, Reveal } from "./CinematicSection";
 import { useIsMobile } from "@/hooks/use-mobile";
-import ribbon from "@/assets/hero-ribbon.jpg";
+import ribbon from "@/assets/work-bg.jpg";
 
 const Work = () => {
   const navigate = useNavigate();
@@ -63,13 +63,10 @@ const Work = () => {
           className={`${isMobile ? "min-h-screen py-20" : "h-screen"} flex flex-col justify-center bg-background`}
           background={
             <>
-              <motion.div style={{ y: ribbonY }} className="absolute inset-y-0 left-0 w-1/3 opacity-25">
-                <img src={ribbon} alt="" className="w-full h-full object-cover -scale-x-100" style={{ mixBlendMode: "screen" }} />
-              </motion.div>
-              <motion.div style={{ y: ribbonY }} className="absolute inset-y-0 right-0 w-1/3 opacity-25">
+              <motion.div style={{ y: ribbonY }} className="absolute inset-0 opacity-60">
                 <img src={ribbon} alt="" className="w-full h-full object-cover" style={{ mixBlendMode: "screen" }} />
               </motion.div>
-              <div className="absolute inset-0 bg-background/40" />
+              <div className="absolute inset-0 bg-background/60" />
             </>
           }
         >

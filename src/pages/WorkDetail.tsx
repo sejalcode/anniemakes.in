@@ -66,9 +66,11 @@ const WorkDetail = () => {
             <h1 className="font-display text-4xl text-foreground mb-6">{project.title}</h1>
             <p className="tracking-[0.3em] text-xs text-foreground/60 mb-2">DESCRIPTION</p>
             <p className="text-foreground/80 leading-relaxed mb-8 font-light">{project.description}</p>
-            <a href={project.youtube} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-6 py-3 border border-highlight/60 text-highlight tracking-[0.25em] text-xs hover:bg-highlight/10 hover:scale-[1.03] transition-all duration-500">
-              WATCH ON YOUTUBE <ArrowUpRight size={14} />
-            </a>
+            {!["VFX", "3D MODELS", "ADS"].includes(project.category) && (
+              <a href={project.youtube} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-6 py-3 border border-highlight/60 text-highlight tracking-[0.25em] text-xs hover:bg-highlight/10 hover:scale-[1.03] transition-all duration-500">
+                WATCH ON YOUTUBE <ArrowUpRight size={14} />
+              </a>
+            )}
           </div>
         </motion.div>
       </div>
