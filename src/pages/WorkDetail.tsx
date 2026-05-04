@@ -85,6 +85,11 @@ const WorkDetail = () => {
                 WATCH ON YOUTUBE <ArrowUpRight size={14} />
               </a>
             )}
+            {["VFX", "3D MODELS"].includes(project.category) && project.instagram && (
+              <a href={project.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-6 py-3 border border-highlight/60 text-highlight tracking-[0.25em] text-xs hover:bg-highlight/10 hover:scale-[1.03] transition-all duration-500">
+                WATCH ON INSTAGRAM <ArrowUpRight size={14} />
+              </a>
+            )}
           </div>
         </motion.div>
       </div>
