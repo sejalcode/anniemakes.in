@@ -38,33 +38,47 @@ const WorkDetail = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="grid md:grid-cols-2 gap-12 items-start"
         >
-          <div className="relative aspect-video overflow-hidden rounded-sm border border-accent-red/40 glow-red bg-background">
-            {project.video ? (
-              <video
-                src={project.video}
-                controls
-                controlsList="nodownload noplaybackrate"
-                disablePictureInPicture
-                className="w-full h-full object-cover"
-                poster={project.img}
-              />
-            ) : (
-              <>
-                <img src={project.img} alt={project.title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 flex items-center justify-center bg-background/40">
-                  <div className="w-16 h-16 rounded-full border border-highlight/70 flex items-center justify-center backdrop-blur-sm">
-                    <span className="text-highlight text-2xl ml-1">▶</span>
-                  </div>
+          <div className="space-y-6">
+            {project.videos && project.videos.length > 0 ? (
+              project.videos.map((src, i) => (
+                <div key={i} className="relative aspect-video overflow-hidden rounded-sm border border-accent-red/40 glow-red bg-background">
+                  <video
+                    src={src}
+                    controls
+                    controlsList="nodownload noplaybackrate"
+                    disablePictureInPicture
+                    className="w-full h-full object-cover"
+                    poster={project.img}
+                  />
                 </div>
-              </>
+              ))
+            ) : (
+              <div className="relative aspect-video overflow-hidden rounded-sm border border-accent-red/40 glow-red bg-background">
+                {project.video ? (
+                  <video
+                    src={project.video}
+                    controls
+                    controlsList="nodownload noplaybackrate"
+                    disablePictureInPicture
+                    className="w-full h-full object-cover"
+                    poster={project.img}
+                  />
+                ) : (
+                  <>
+                    <img src={project.img} alt={project.title} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 flex items-center justify-center bg-background/40">
+                      <div className="w-16 h-16 rounded-full border border-highlight/70 flex items-center justify-center backdrop-blur-sm">
+                        <span className="text-highlight text-2xl ml-1">▶</span>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
             )}
           </div>
           <div>
-            <p className="tracking-[0.3em] text-xs text-foreground/60 mb-1">PROJECT TYPE</p>
             <h2 className="font-display text-3xl text-highlight mb-6">{project.category}</h2>
-            <p className="tracking-[0.3em] text-xs text-foreground/60 mb-1">PROJECT TITLE</p>
             <h1 className="font-display text-4xl text-foreground mb-6">{project.title}</h1>
-            <p className="tracking-[0.3em] text-xs text-foreground/60 mb-2">DESCRIPTION</p>
             <p className="text-foreground/80 leading-relaxed mb-8 font-light">{project.description}</p>
             {!["VFX", "3D MODELS", "ADS"].includes(project.category) && (
               <a href={project.youtube} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-6 py-3 border border-highlight/60 text-highlight tracking-[0.25em] text-xs hover:bg-highlight/10 hover:scale-[1.03] transition-all duration-500">
