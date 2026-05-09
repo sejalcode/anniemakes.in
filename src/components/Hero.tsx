@@ -10,16 +10,28 @@ interface Props {
 const SERVICES = ["VFX", "3D MODELLING", "AI CONTENT", "ANIMATION", "VIDEO PRODUCTION"];
 const AGENCY = "ANNIE MAKES";
 
+const INTRO_KEY = "annie-hero-intro-played";
+
 const Hero = ({ onIntroComplete }: Props) => {
+  // Skip the staged reveal if the intro has already played this session.
+  const alreadyPlayed =
+    typeof window !== "undefined" && sessionStorage.getItem(INTRO_KEY) === "1";
   // Stage 0: blank, 1: ribbon visible, 2: title + content
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(alreadyPlayed ? 2 : 0);
 
   useEffect(() => {
+    if (alreadyPlayed) {
+      onIntroComplete();
+      return;
+    }
     const t1 = setTimeout(() => setStage(1), 400);   // ribbon pattern fades in
     const t2 = setTimeout(() => setStage(2), 1800);  // title + rest reveal
-    const t3 = setTimeout(() => onIntroComplete(), 2800); // header appears
+    const t3 = setTimeout(() => {
+      onIntroComplete();
+      try { sessionStorage.setItem(INTRO_KEY, "1"); } catch {}
+    }, 2800);
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
-  }, [onIntroComplete]);
+  }, [onIntroComplete, alreadyPlayed]);
 
   return (
     <section
