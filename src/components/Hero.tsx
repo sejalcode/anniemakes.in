@@ -157,10 +157,28 @@ const Hero = ({ onIntroComplete }: Props) => {
           initial={{ opacity: 0, y: 20 }}
           animate={stage >= 2 ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="inline-flex items-center gap-3 mb-10 text-highlight/90 hover:text-highlight transition-colors w-fit group"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.97 }}
+          className="relative inline-flex items-center gap-3 mb-10 px-5 py-2.5 rounded-full w-fit group overflow-hidden border border-accent-red/60 bg-gradient-to-r from-accent-red/30 via-accent-red/20 to-highlight/10 text-highlight hover:text-background hover:border-highlight transition-all duration-500"
+          style={{ boxShadow: "0 0 24px hsl(var(--accent-red) / 0.55)" }}
         >
-          <Instagram size={18} strokeWidth={1.5} className="text-accent-red group-hover:text-highlight transition-colors" />
-          <span className="tracking-[0.35em] text-xs md:text-sm font-light">@ANNIEMAKESSTUDIO</span>
+          {/* Pulsing glow ring */}
+          <motion.span
+            aria-hidden
+            className="absolute inset-0 rounded-full"
+            animate={{ boxShadow: [
+              "0 0 0px hsl(var(--accent-red) / 0.0)",
+              "0 0 28px hsl(var(--accent-red) / 0.75)",
+              "0 0 0px hsl(var(--accent-red) / 0.0)",
+            ] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {/* Sweeping shine on hover */}
+          <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-highlight/80 to-transparent" />
+          {/* Hover fill */}
+          <span className="absolute inset-0 bg-highlight scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 -z-0" />
+          <Instagram size={20} strokeWidth={2.5} className="relative z-10 text-highlight group-hover:text-background transition-colors" />
+          <span className="relative z-10 tracking-[0.35em] text-xs md:text-sm font-bold uppercase">@anniemakesstudio</span>
         </motion.a>
 
         {/* Services list with timeline */}
