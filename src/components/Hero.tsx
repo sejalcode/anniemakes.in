@@ -149,6 +149,20 @@ const Hero = ({ onIntroComplete }: Props) => {
           </div>
         </div>
 
+        {/* Instagram link */}
+        <motion.a
+          href="https://www.instagram.com/anniemakesstudio/"
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, y: 20 }}
+          animate={stage >= 2 ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="inline-flex items-center gap-3 mb-10 text-highlight/90 hover:text-highlight transition-colors w-fit group"
+        >
+          <Instagram size={18} strokeWidth={1.5} className="text-accent-red group-hover:text-highlight transition-colors" />
+          <span className="tracking-[0.35em] text-xs md:text-sm font-light">@ANNIEMAKESSTUDIO</span>
+        </motion.a>
+
         {/* Services list with timeline */}
         <div className="relative pl-8 md:pl-10 mb-12 max-w-md">
           {/* Vertical line */}
