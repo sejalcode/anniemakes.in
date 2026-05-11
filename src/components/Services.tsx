@@ -120,7 +120,7 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
         <>
           <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${bg})`, opacity: 0.35, filter: "saturate(1.2) hue-rotate(-10deg)" }}
+            style={{ backgroundImage: `url(${bg})`, opacity: 0.85, filter: "saturate(1.2) hue-rotate(-10deg)" }}
           />
           {wash}
         </>
@@ -139,7 +139,7 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
             className="absolute inset-0 bg-cover bg-center"
             style={{
               backgroundImage: `url(${bg})`,
-              opacity: 0.35,
+              opacity: 0.85,
               filter: `hue-rotate(280deg) saturate(1.5)`,
             }}
             animate={{ x: [0, -4, 3, -2, 0] }}
@@ -211,9 +211,9 @@ const Panel = ({
       className="relative shrink-0 h-screen flex items-center justify-center px-6 lg:px-12"
       style={{ width: "100vw" }}
     >
-      <div className="absolute inset-6 lg:inset-12 rounded-lg overflow-hidden border border-highlight/10 bg-background/30">
+      <div className="absolute inset-6 lg:inset-12 rounded-lg overflow-hidden border border-highlight/15 bg-background/10">
         <PanelBackground s={s} />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-transparent to-background/40" />
       </div>
 
       <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-start">
