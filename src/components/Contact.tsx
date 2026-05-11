@@ -52,9 +52,11 @@ const Contact = () => {
             <p className="mt-4 text-foreground/85 font-light">Let's create something impactful together.</p>
           </Reveal>
 
+          <Reveal order={4}>
+            <div className="mt-16">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <span className="w-12 h-px bg-accent-red/60" />
-                <p className="tracking-[0.35em] text-xs text-accent-red">OR REACH US DIRECTLY</p>
+                <p className="tracking-[0.35em] text-xs text-accent-red">REACH US DIRECTLY</p>
                 <span className="w-12 h-px bg-accent-red/60" />
               </div>
               <a href="mailto:anniemakesstudio@gmail.com" className="inline-flex items-center gap-3 text-foreground hover:text-highlight transition">
