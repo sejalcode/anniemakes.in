@@ -1,38 +1,13 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
-import { Mail, ArrowRight } from "lucide-react";
-import { z } from "zod";
-import { toast } from "sonner";
+import { useRef } from "react";
+import { Mail } from "lucide-react";
 import { CinematicSection, Reveal } from "./CinematicSection";
 import bg from "@/assets/contact-bg.jpeg";
 
-const schema = z.object({
-  name: z.string().trim().min(1, "Name required").max(100),
-  email: z.string().trim().email("Invalid email").max(255),
-  message: z.string().trim().min(1, "Message required").max(1000),
-});
-
 const Contact = () => {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [sent, setSent] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const result = schema.safeParse(form);
-    if (!result.success) {
-      toast.error(result.error.issues[0].message);
-      return;
-    }
-    const body = new URLSearchParams({ "form-name": "contact", ...form }).toString();
-    fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body })
-      .catch(() => {});
-    setSent(true);
-    toast.success("Message sent successfully. I'll get back to you soon.");
-    setForm({ name: "", email: "", message: "" });
-  };
 
   return (
     <div ref={ref}>
