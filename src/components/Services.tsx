@@ -120,7 +120,7 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
         <>
           <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${bg})`, opacity: 0.35, filter: "saturate(1.2) hue-rotate(-10deg)" }}
+            style={{ backgroundImage: `url(${bg})`, opacity: 0.85, filter: "saturate(1.2) hue-rotate(-10deg)" }}
           />
           {wash}
         </>
@@ -139,7 +139,7 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
             className="absolute inset-0 bg-cover bg-center"
             style={{
               backgroundImage: `url(${bg})`,
-              opacity: 0.35,
+              opacity: 0.85,
               filter: `hue-rotate(280deg) saturate(1.5)`,
             }}
             animate={{ x: [0, -4, 3, -2, 0] }}
