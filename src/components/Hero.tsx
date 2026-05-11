@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Mouse } from "lucide-react";
+import { Mouse, Instagram } from "lucide-react";
 import ribbon from "@/assets/hero-ribbon.jpg";
 
 interface Props {
