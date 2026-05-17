@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { Camera, Film, Clapperboard } from "lucide-react";
 import { CinematicSection, Reveal } from "./CinematicSection";
 import bg from "@/assets/about-bg.jpeg";
 
