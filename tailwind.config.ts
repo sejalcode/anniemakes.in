@@ -15,7 +15,7 @@ export default {
     extend: {
       fontFamily: {
         display: ['"Cormorant Garamond"', 'serif'],
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Karla', 'sans-serif'],
       },
       colors: {
         highlight: "hsl(var(--highlight))",
