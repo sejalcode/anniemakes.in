@@ -258,17 +258,6 @@ const Hero = ({ onIntroComplete }: Props) => {
         </motion.button>
       </div>
 
-      {/* Scroll cue */}
-      <motion.button
-        initial={{ opacity: 0, y: 20 }}
-        animate={stage >= 2 ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 1, delay: 2.1 }}
-        onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-highlight/80 hover:text-highlight transition-colors"
-      >
-        <Mouse size={22} strokeWidth={1.25} />
-        <span className="tracking-[0.35em] text-[10px] uppercase">Scroll to Discover</span>
-      </motion.button>
     </section>
   );
 };
