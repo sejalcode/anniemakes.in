@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Karla:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -68,11 +68,14 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Karla', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.01em;
   }
   h1, h2, h3, h4, .font-display {
     font-family: 'Cormorant Garamond', serif;
     letter-spacing: 0.02em;
+    font-weight: 500;
   }
 }
 
