@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Mouse, Instagram } from "lucide-react";
+import { Instagram, Sparkles } from "lucide-react";
 import ribbon from "@/assets/hero-ribbon.jpg";
 
 interface Props {
@@ -150,14 +150,19 @@ const Hero = ({ onIntroComplete }: Props) => {
         </div>
 
         {/* Worked with */}
-        <motion.p
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={stage >= 2 ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-10 text-sm md:text-base text-foreground/70 tracking-wider"
+          className="mb-10 inline-flex items-center gap-3 w-fit"
         >
-          🫱🏽‍🫲🏻 worked with T-Series
-        </motion.p>
+          <span className="h-px w-8 bg-highlight/50" />
+          <Sparkles size={14} strokeWidth={1.5} className="text-highlight" />
+          <p className="font-display italic text-base md:text-lg text-highlight/90 tracking-wide">
+            Worked with <span className="text-highlight not-italic font-medium tracking-[0.2em] uppercase text-sm md:text-base">T-Series</span>
+          </p>
+        </motion.div>
+
 
         {/* Instagram link */}
         <motion.a
@@ -253,17 +258,6 @@ const Hero = ({ onIntroComplete }: Props) => {
         </motion.button>
       </div>
 
-      {/* Scroll cue */}
-      <motion.button
-        initial={{ opacity: 0, y: 20 }}
-        animate={stage >= 2 ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 1, delay: 2.1 }}
-        onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-highlight/80 hover:text-highlight transition-colors"
-      >
-        <Mouse size={22} strokeWidth={1.25} />
-        <span className="tracking-[0.35em] text-[10px] uppercase">Scroll to Discover</span>
-      </motion.button>
     </section>
   );
 };
