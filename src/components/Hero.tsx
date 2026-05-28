@@ -149,6 +149,16 @@ const Hero = ({ onIntroComplete }: Props) => {
           </div>
         </div>
 
+        {/* Worked with */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={stage >= 2 ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-10 text-sm md:text-base text-foreground/70 tracking-wider"
+        >
+          🫱🏽‍🫲🏻 worked with T-Series
+        </motion.p>
+
         {/* Instagram link */}
         <motion.a
           href="https://www.instagram.com/anniemakesstudio/"
