@@ -125,20 +125,24 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
       }}
     />
   );
+  const baseImg = (extraStyle: React.CSSProperties = {}) => (
+    <div
+      className="absolute inset-0 bg-cover bg-center"
+      style={{ backgroundImage: `url(${s.bg})`, opacity: 0.85, ...extraStyle }}
+    />
+  );
   switch (s.flavor) {
     case "slit":
       return (
         <>
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${bg})`, opacity: 0.85, filter: "saturate(1.2) hue-rotate(-10deg)" }}
-          />
+          {baseImg({ filter: "saturate(1.2) hue-rotate(-10deg)" })}
           {wash}
         </>
       );
     case "depth":
       return (
         <>
+          {baseImg()}
           <WireframeCube hue={s.hue} />
           {wash}
         </>
@@ -149,9 +153,8 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
           <motion.div
             className="absolute inset-0 bg-cover bg-center"
             style={{
-              backgroundImage: `url(${bg})`,
+              backgroundImage: `url(${s.bg})`,
               opacity: 0.85,
-              filter: `hue-rotate(280deg) saturate(1.5)`,
             }}
             animate={{ x: [0, -4, 3, -2, 0] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
@@ -162,6 +165,7 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
     case "pulse":
       return (
         <>
+          {baseImg()}
           <motion.div
             className="absolute inset-0"
             animate={{ opacity: [0.25, 0.55, 0.25] }}
@@ -176,6 +180,7 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
     case "fluid":
       return (
         <>
+          {baseImg()}
           <motion.div
             className="absolute inset-0"
             animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
@@ -183,6 +188,7 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
             style={{
               background: `linear-gradient(120deg, hsl(${s.hue} / 0.32), transparent 40%, hsl(${s.hue} / 0.22) 80%)`,
               backgroundSize: "200% 200%",
+              mixBlendMode: "screen",
             }}
           />
           {wash}
