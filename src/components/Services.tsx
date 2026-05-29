@@ -238,7 +238,8 @@ const Panel = ({
     >
       <div className="absolute inset-6 lg:inset-12 rounded-lg overflow-hidden border border-highlight/15 bg-background/10">
         <PanelBackground s={s} />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-transparent to-background/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/55 to-background/80" />
+        <div className="absolute inset-0 bg-background/30" />
       </div>
 
       <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-start">
