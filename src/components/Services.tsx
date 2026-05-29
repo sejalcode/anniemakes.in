@@ -128,14 +128,20 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
   const baseImg = (extraStyle: React.CSSProperties = {}) => (
     <div
       className="absolute inset-0 bg-cover bg-center"
-      style={{ backgroundImage: `url(${s.bg})`, opacity: 0.85, ...extraStyle }}
+      style={{
+        backgroundImage: `url(${s.bg})`,
+        opacity: 0.35,
+        filter: "blur(6px) saturate(0.9)",
+        transform: "scale(1.05)",
+        ...extraStyle,
+      }}
     />
   );
   switch (s.flavor) {
     case "slit":
       return (
         <>
-          {baseImg({ filter: "saturate(1.2) hue-rotate(-10deg)" })}
+          {baseImg({ filter: "blur(6px) saturate(1.05) hue-rotate(-10deg)" })}
           {wash}
         </>
       );
@@ -154,7 +160,9 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
             className="absolute inset-0 bg-cover bg-center"
             style={{
               backgroundImage: `url(${s.bg})`,
-              opacity: 0.85,
+              opacity: 0.35,
+              filter: "blur(6px) saturate(0.9)",
+              transform: "scale(1.05)",
             }}
             animate={{ x: [0, -4, 3, -2, 0] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
@@ -230,7 +238,8 @@ const Panel = ({
     >
       <div className="absolute inset-6 lg:inset-12 rounded-lg overflow-hidden border border-highlight/15 bg-background/10">
         <PanelBackground s={s} />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-transparent to-background/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/55 to-background/80" />
+        <div className="absolute inset-0 bg-background/30" />
       </div>
 
       <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-start">
