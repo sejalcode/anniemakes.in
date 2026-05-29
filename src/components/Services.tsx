@@ -128,7 +128,13 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
   const baseImg = (extraStyle: React.CSSProperties = {}) => (
     <div
       className="absolute inset-0 bg-cover bg-center"
-      style={{ backgroundImage: `url(${s.bg})`, opacity: 0.85, ...extraStyle }}
+      style={{
+        backgroundImage: `url(${s.bg})`,
+        opacity: 0.35,
+        filter: "blur(6px) saturate(0.9)",
+        transform: "scale(1.05)",
+        ...extraStyle,
+      }}
     />
   );
   switch (s.flavor) {
