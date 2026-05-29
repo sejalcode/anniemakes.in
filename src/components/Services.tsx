@@ -10,6 +10,11 @@ import { useRef, useState, useEffect } from "react";
 import { Box, Brain, Film, Hexagon, Layers3 } from "lucide-react";
 import { Reveal } from "./CinematicSection";
 import bg from "@/assets/services-bg.jpeg";
+import bgVfx from "@/assets/service-vfx.jpg";
+import bg3d from "@/assets/service-3d.jpg";
+import bgAi from "@/assets/service-ai.jpg";
+import bgEdit from "@/assets/service-edit.jpg";
+import bgAnimation from "@/assets/service-animation.jpg";
 
 interface ServiceItem {
   num: string;
@@ -18,6 +23,7 @@ interface ServiceItem {
   desc: string;
   hue: string;
   flavor: "slit" | "depth" | "glitch" | "pulse" | "fluid";
+  bg: string;
 }
 
 const SERVICES: ServiceItem[] = [
@@ -28,6 +34,7 @@ const SERVICES: ServiceItem[] = [
     desc: "Cinematic compositing and high-end visual effects that bring imagination to life with precision.",
     hue: "28 95% 62%",
     flavor: "slit",
+    bg: bgVfx,
   },
   {
     num: "02",
@@ -36,6 +43,7 @@ const SERVICES: ServiceItem[] = [
     desc: "Sculpted geometry, materials and lighting — from product renders to fully realized cinematic worlds.",
     hue: "210 20% 88%",
     flavor: "depth",
+    bg: bg3d,
   },
   {
     num: "03",
@@ -44,6 +52,7 @@ const SERVICES: ServiceItem[] = [
     desc: "AI-driven content creation and workflows that accelerate ideas and elevate creative storytelling.",
     hue: "315 90% 70%",
     flavor: "glitch",
+    bg: bgAi,
   },
   {
     num: "04",
@@ -52,6 +61,7 @@ const SERVICES: ServiceItem[] = [
     desc: "Story-driven editing that shapes raw footage into powerful, engaging, emotionally resonant films.",
     hue: "208 95% 68%",
     flavor: "pulse",
+    bg: bgEdit,
   },
   {
     num: "05",
@@ -60,6 +70,7 @@ const SERVICES: ServiceItem[] = [
     desc: "Motion graphics and fluid animation that communicate ideas through movement, style and emotion.",
     hue: "180 80% 72%",
     flavor: "fluid",
+    bg: bgAnimation,
   },
 ];
 
