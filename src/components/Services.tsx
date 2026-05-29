@@ -141,7 +141,7 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
     case "slit":
       return (
         <>
-          {baseImg({ filter: "saturate(1.2) hue-rotate(-10deg)" })}
+          {baseImg({ filter: "blur(6px) saturate(1.05) hue-rotate(-10deg)" })}
           {wash}
         </>
       );
