@@ -160,7 +160,9 @@ const PanelBackground = ({ s }: { s: ServiceItem }) => {
             className="absolute inset-0 bg-cover bg-center"
             style={{
               backgroundImage: `url(${s.bg})`,
-              opacity: 0.85,
+              opacity: 0.35,
+              filter: "blur(6px) saturate(0.9)",
+              transform: "scale(1.05)",
             }}
             animate={{ x: [0, -4, 3, -2, 0] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
