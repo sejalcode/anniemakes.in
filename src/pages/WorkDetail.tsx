@@ -68,6 +68,14 @@ const WorkDetail = () => {
                     className="w-full h-full object-cover"
                     poster={project.img}
                   />
+                ) : project.youtube ? (
+                  <iframe
+                    src={getYouTubeEmbedUrl(project.youtube)}
+                    title={project.title}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
                 ) : (
                   <>
                     <img src={project.img} alt={project.title} className="w-full h-full object-cover" />
