@@ -2,7 +2,12 @@ import { motion } from "framer-motion";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { PROJECTS } from "@/data/projects";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+
+const getYouTubeEmbedUrl = (url: string) => {
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^?&]+)/);
+  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+};
 
 const WorkDetail = () => {
   const { id } = useParams();
