@@ -39,7 +39,7 @@ const Footer = () => {
 
       <div className="max-w-7xl mx-auto mt-14 pt-6 border-t border-accent-red/20 flex items-center justify-center gap-4">
         <span className="w-1 h-1 rounded-full bg-accent-red" />
-        <p className="text-xs tracking-wider text-foreground/60 text-center">© 2024 Annie Makes Studio. All rights reserved.</p>
+        <p className="text-xs tracking-wider text-foreground/60 text-center">© 2026 Annie Makes Studio. All rights reserved.</p>
         <span className="w-1 h-1 rounded-full bg-accent-red" />
       </div>
     </footer>
