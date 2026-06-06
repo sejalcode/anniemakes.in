@@ -4,6 +4,11 @@ import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { PROJECTS } from "@/data/projects";
 import { useEffect } from "react";
 
+const getYouTubeEmbedUrl = (url: string) => {
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^?&]+)/);
+  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+};
+
 const WorkDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -62,6 +67,14 @@ const WorkDetail = () => {
                     disablePictureInPicture
                     className="w-full h-full object-cover"
                     poster={project.img}
+                  />
+                ) : project.youtube ? (
+                  <iframe
+                    src={getYouTubeEmbedUrl(project.youtube)}
+                    title={project.title}
+                    className="w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
                   />
                 ) : (
                   <>
