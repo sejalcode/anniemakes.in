@@ -4,6 +4,7 @@ import doc from "@/assets/work-documentary.jpg";
 import vfx from "@/assets/work-vfx.jpg";
 import digital from "@/assets/work-digital.jpg";
 import goZeroAd from "@/assets/go-zero-ad.mp4";
+import aiFilm from "@/assets/work-ai-film.jpg";
 
 export interface Project {
   id: number;
