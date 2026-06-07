@@ -16,7 +16,46 @@ const WorkDetail = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (project) document.title = `${project.title} — Annie Makes Studio`;
+    if (!project) return;
+    const title = `${project.title} — ${project.category} | Annie Makes Studio`;
+    document.title = title;
+
+    const setMeta = (selector: string, attr: string, value: string) => {
+      let el = document.head.querySelector<HTMLMetaElement>(selector);
+      if (!el) {
+        el = document.createElement("meta");
+        const [a, v] = selector.replace(/[\[\]"]/g, "").split("=");
+        el.setAttribute(a, v);
+        document.head.appendChild(el);
+      }
+      el.setAttribute(attr, value);
+    };
+
+    const desc = project.description.slice(0, 160);
+    setMeta('meta[name="description"]', "content", desc);
+    setMeta('meta[property="og:title"]', "content", title);
+    setMeta('meta[name="twitter:title"]', "content", title);
+    setMeta('meta[property="og:description"]', "content", desc);
+    setMeta('meta[name="twitter:description"]', "content", desc);
+
+    const ldId = "ld-project";
+    document.getElementById(ldId)?.remove();
+    const ld = document.createElement("script");
+    ld.type = "application/ld+json";
+    ld.id = ldId;
+    ld.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      name: project.title,
+      genre: project.category,
+      description: project.description,
+      url: typeof window !== "undefined" ? window.location.href : undefined,
+      image: project.img,
+      creator: { "@type": "Organization", name: "Annie Makes Studio" },
+    });
+    document.head.appendChild(ld);
+
+    return () => { document.getElementById(ldId)?.remove(); };
   }, [project]);
 
   if (!project) {
@@ -90,8 +129,8 @@ const WorkDetail = () => {
             )}
           </div>
           <div>
-            <h2 className="font-display text-3xl text-highlight mb-6">{project.category}</h2>
-            <h1 className="font-display text-4xl text-foreground mb-6">{project.title}</h1>
+            <h1 className="font-display text-4xl text-foreground mb-3">{project.title}</h1>
+            <h2 className="font-display text-2xl text-highlight mb-6">{project.category}</h2>
             <p className="text-foreground/80 leading-relaxed mb-8 font-light">{project.description}</p>
             {!["VFX", "3D MODELS", "ADS"].includes(project.category) && (
               <a href={project.youtube} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-6 py-3 border border-highlight/60 text-highlight tracking-[0.25em] text-xs hover:bg-highlight/10 hover:scale-[1.03] transition-all duration-500">

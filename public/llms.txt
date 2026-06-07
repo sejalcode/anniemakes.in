@@ -1,0 +1,14 @@
+# Annie Makes Studio
+
+> A creative production house crafting cinematic storytelling, VFX, animation, AI-driven content, and 3D modeling.
+
+Annie Makes Studio is an independent creative studio offering VFX, 3D modeling, AI content, animation, and video production for brands, filmmakers, and agencies.
+
+## Pages
+
+- [Home](/): Studio overview, services, featured work, and contact.
+- [Red Horizon — VFX](/work/4): Sci-fi VFX showcase blending practical lighting and CG environments.
+- [Form & Light — 3D Models](/work/5): 3D modeling and rendering — form, material, and light in cinematic frames.
+- [Go Zero — Ice Cream Ad](/work/1): High-energy commercial film combining cinematic storytelling and sleek VFX.
+- [Through the Lens — Short Film](/work/2): Intimate short film exploring the craft of filmmaking.
+- [Above the Clouds — Documentary](/work/3): Documentary capturing the silent vastness of mountain ecosystems at dawn.

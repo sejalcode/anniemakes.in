@@ -39,6 +39,7 @@ const Hero = ({ onIntroComplete }: Props) => {
       className="relative min-h-screen w-full overflow-hidden"
       style={{ backgroundColor: "#1a0402" }}
     >
+      <h1 className="sr-only">Annie Makes Studio — Cinematic Storytelling, VFX & AI Content</h1>
       {/* SVG turbulence filter — creates wavy heat-haze warp on the ribbon */}
       <svg className="absolute -z-10 w-0 h-0" aria-hidden="true">
         <defs>
