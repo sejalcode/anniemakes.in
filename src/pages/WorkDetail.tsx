@@ -132,7 +132,9 @@ const WorkDetail = () => {
             <h1 className="font-display text-4xl text-foreground mb-3">{project.title}</h1>
             <h2 className="font-display text-2xl text-highlight mb-6">{project.category}</h2>
             <p className="text-foreground/80 leading-relaxed mb-8 font-light">{project.description}</p>
-            <p className="text-foreground/80 leading-relaxed mb-4 font-light">Watch full Short Film on youtube</p>
+            {project.category === "SHORT FILMS" && (
+              <p className="text-foreground/80 leading-relaxed mb-4 font-light">Watch full Short Film on youtube</p>
+            )}
             {! ["VFX", "3D MODELS", "ADS"].includes(project.category) && (
               <a href={project.youtube} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-6 py-3 border border-highlight/60 text-highlight tracking-[0.25em] text-xs hover:bg-highlight/10 hover:scale-[1.03] transition-all duration-500">
                 WATCH ON YOUTUBE <ArrowUpRight size={14} />
