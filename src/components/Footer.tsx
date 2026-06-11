@@ -31,8 +31,8 @@ const Footer = () => {
           <h4 className="tracking-[0.35em] text-xs text-accent-red mb-5">FOLLOW US</h4>
           <ul className="space-y-3 text-sm text-foreground/85 font-light">
             <li><a href="https://www.instagram.com/anniemakesstudio/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-highlight transition"><Instagram size={16} className="text-accent-red" /> Instagram</a></li>
-            <li><a href="#" className="flex items-center gap-3 hover:text-highlight transition"><Youtube size={16} className="text-accent-red" /> YouTube</a></li>
-            <li><a href="#" className="flex items-center gap-3 hover:text-highlight transition"><Linkedin size={16} className="text-accent-red" /> LinkedIn</a></li>
+            <li><a href="https://www.youtube.com/@AnnieMakesStudio" className="flex items-center gap-3 hover:text-highlight transition"><Youtube size={16} className="text-accent-red" /> YouTube</a></li>
+            {/* <li><a href="#" className="flex items-center gap-3 hover:text-highlight transition"><Linkedin size={16} className="text-accent-red" /> LinkedIn</a></li> */}
           </ul>
         </div>
       </div>
