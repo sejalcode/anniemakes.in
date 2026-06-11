@@ -5,7 +5,7 @@ import { PROJECTS } from "@/data/projects";
 import { useEffect } from "react";
 
 const getYouTubeEmbedUrl = (url: string) => {
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^?&]+)/);
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:shorts\/|embed\/|v\/|watch\?v=|watch\?.+&v=))([^?&]+)/);
   return match ? `https://www.youtube.com/embed/${match[1]}` : url;
 };
 
