@@ -3,8 +3,7 @@ import doc from "@/assets/work-documentary.jpg";
 import vfx from "@/assets/work-vfx.jpg";
 import digital from "@/assets/work-digital.jpg";
 import goZeroAd from "@/assets/go-zero-ad.mp4";
-import goZeroThumb from "@/assets/go-zero-thumb.jpeg.asset.json";
-const ads = goZeroThumb.url;
+import ads from "@/assets/go-zero-thumb.jpeg";
 
 
 
